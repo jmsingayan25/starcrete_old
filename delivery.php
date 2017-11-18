@@ -551,7 +551,7 @@ hr{
 														<h4 class="modal-title">Delivery Details</h4>
 													</div>
 													<div class="modal-body" style="text-align: left;">
-														<input type="hidden" id="hidden_id" name="hidden_id" value="<?php echo $row['delivery_id']; ?>">
+														<!-- <input type="hidden" id="hidden_id" name="hidden_id" value="<?php echo $row['delivery_id']; ?>"> -->
 														<input type="hidden" id="hidden_fk_id" name="hidden_fk_id" value="<?php echo $row['fk_po_id']; ?>">
 														<input type="hidden" id="hidden_dr_no" name="hidden_dr_no" value="<?php echo $row['delivery_receipt_no']; ?>">
 														<input type="hidden" id="hidden_item_no" name="hidden_item_no" value="<?php echo $row['item_no']; ?>">
@@ -564,7 +564,8 @@ hr{
 																<label>DR No.</label>
 															</div>
 															<div class="col-md-6">
-																<strong><?php echo $row['delivery_receipt_no'] ?></strong>
+																<!-- <strong><?php echo $row['delivery_receipt_no'] ?></strong> -->
+																<input type="text" name="update_delivery_receipt_no" value="<?php echo $row['delivery_receipt_no'] ?>" class="form-control">
 															</div>
 														</div>
 														<hr>
@@ -864,7 +865,7 @@ hr{
 														<h4 class="modal-title">Delivery Details</h4>
 													</div>
 													<div class="modal-body" style="text-align: left;">
-														<input type="hidden" id="hidden_id" name="hidden_id" value="<?php echo $row['delivery_id']; ?>">
+														<!-- <input type="hidden" id="hidden_id" name="hidden_id" value="<?php echo $row['delivery_id']; ?>"> -->
 														<input type="hidden" id="hidden_fk_id" name="hidden_fk_id" value="<?php echo $row['fk_po_id']; ?>">
 														<input type="hidden" id="hidden_dr_no" name="hidden_dr_no" value="<?php echo $row['delivery_receipt_no']; ?>">
 														<input type="hidden" id="hidden_item_no" name="hidden_item_no" value="<?php echo $row['item_no']; ?>">
@@ -876,8 +877,9 @@ hr{
 															<div class="col-md-6">
 																<label>DR No.</label>
 															</div>
-															<div class="col-md-6">
-																<strong><?php echo $row['delivery_receipt_no'] ?></strong>
+															<div class="col-md-6" style="padding-bottom: 15px;">
+																<!-- <strong><?php echo $row['delivery_receipt_no'] ?></strong> -->
+																<input type="text" name="update_delivery_receipt_no" value="<?php echo $row['delivery_receipt_no'] ?>" class="form-control">
 															</div>
 														</div>
 														<hr>
@@ -1243,7 +1245,9 @@ hr{
 		}
 	}else if(isset($_POST['update'])){
 
-		$delivery_id = $_POST['hidden_id'];
+
+		// $delivery_id = $_POST['hidden_id'];
+		$delivery_id = $_POST['update_delivery_receipt_no'];
 		$delivery_receipt_no = $_POST['hidden_dr_no'];
 		$fk_po_id = $_POST['hidden_fk_id'];
 		$prev_item_no = $_POST['hidden_item_no'];
@@ -1254,7 +1258,30 @@ hr{
 
 		$sql = "UPDATE delivery SET item_no = '$update_item_no' WHERE delivery_id = '$delivery_id' AND delivery_receipt_no = '$delivery_receipt_no' AND fk_po_id = '$fk_po_id' AND office = '$office'";
 
+		// update item only
 		$history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no item $prev_item_no to $update_item_no to be delivered to $client','$datetime','$office')";
+
+		// // update DR No. only
+		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No.' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id','$datetime','$office')";
+
+		// // update quantity only
+		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item Quantity' ,'$update_item_no','".ucfirst($office)." changed item quantity of $prev_item_no to $quantity under DR No. $delivery_receipt_no','$datetime','$office')";
+
+		// // update quantity and DR no only
+		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item Quantity and DR No.' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and quantity of item $prev_item_no to $quantity','$datetime','$office')";
+
+		// // update quantity and item only
+		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item and Item Quantity' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and item $prev_item_no to $update_item_no','$datetime','$office')";
+
+		// // update DR No and item only
+		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No. and Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and item $prev_item_no to $update_item_no','$datetime','$office')";
+
+		// // update DR No., quantity and item only
+		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No., Item and Item Quantity' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id, item $prev_item_no to $update_item_no and quantity to $quantity','$datetime','$office')";
+
+
+
+
 
 		// echo $sql;
 		// echo $history;
