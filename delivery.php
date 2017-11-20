@@ -1267,6 +1267,9 @@ hr{
 		// // update quantity only
 		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item Quantity' ,'$update_item_no','".ucfirst($office)." changed item quantity of $prev_item_no to $quantity under DR No. $delivery_receipt_no','$datetime','$office')";
 
+		// update gatepass only
+		$history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No. and Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and item $prev_item_no to $update_item_no','$datetime','$office')";
+		
 		// // update quantity and DR no only
 		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item Quantity and DR No.' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and quantity of item $prev_item_no to $quantity','$datetime','$office')";
 
