@@ -10,8 +10,8 @@
 		header("location: login.php");
 	}
 
-	if(!isset($_REQUEST['post_purchase_id'])){
-		header("location: purchase_order.php");
+	if(isset($_REQUEST['post_purchase_id'])){
+		$_SESSION['purchase_id'] = $_POST['post_purchase_id'];
 	}
 
 	$user_query = $db->prepare("SELECT * FROM users WHERE username = ?");
@@ -23,7 +23,7 @@
 	$office = $user['office'];
 	$position = $user['position'];
 
-	$purchase_id = $_REQUEST['post_purchase_id'];
+	$purchase_id = $_SESSION['purchase_id'];
 	$search_sql = "SELECT * FROM purchase_order WHERE purchase_id = '$purchase_id'";
 	$search_result = mysqli_query($db, $search_sql);
 	$purchase_row = mysqli_fetch_assoc($search_result);
@@ -177,7 +177,7 @@ th, footer {
 						<tr id="row1" style="text-align: center;">
 							<td class="col-md-6">
 								<div class="form-group">
-									<input list="item_nos" name="item_no" class="form-control">
+									<input list="item_nos" name="item_no" class="form-control" value="<?php echo $purchase_row['item_no']; ?>">
 										<datalist id="item_nos">
 <?php
 	$sql = "SELECT item_no FROM batch_list ORDER BY item_no ASC";
@@ -191,7 +191,7 @@ th, footer {
 							</td>
 							<td class="col-md-6">
 								<div class="form-group">
-									<input type="text" id="quantity" name="quantity" class="form-control" autocomplete="off" required>
+									<input type="text" id="quantity" name="quantity" class="form-control" autocomplete="off" value="<?php echo $purchase_row['quantity']; ?>" required>
 								</div>
 							</td>
 						</tr>
@@ -201,7 +201,7 @@ th, footer {
 				<div class="row">
 					<div class="col-md-12">
 						<input type="submit" name="submit" value="Submit" class="btn btn-primary btn-block">
-						<input type="reset" name="Reset" class="btn btn-warning btn-block">
+						<a href="purchase_order.php" class="btn btn-warning btn-block">Cancel</a>
 					</div>
 				</div>
 			</form>
@@ -222,7 +222,22 @@ th, footer {
 
 	if(isset($_POST['submit'])){
 
-		
+		$purchase_order_no = $_POST['po_no'];
+		$item_no = $_POST['item_no'];
+		$quantity = $_POST['quantity'];
+
+		$reply = array('post' => $_POST);
+		echo json_encode($reply);
+
+		$sql_update = "UPDATE purchase_order SET purchase_order_no = '$purchase_order_no', item_no = '$item_no', quantity = '$quantity' WHERE purchase_id = '$purchase_id'";
+
+			// echo "<script> alert('Purchase Order No. succesfully updated')</script>";
+
+		// if(mysqli_query($sql_update)){
+		// 	echo "<script> alert('Purchase Order No. succesfully updated')</script>";
+		// }
+
+		echo $sql_update;
 	}
 
 ?>
