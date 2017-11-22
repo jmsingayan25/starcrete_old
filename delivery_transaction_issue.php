@@ -29,6 +29,16 @@
 	$search_result = mysqli_query($db, $search_sql);
 	$purchase_row = mysqli_fetch_assoc($search_result);
 
+	$dr_query = "SELECT delivery_receipt_no
+					FROM delivery
+					WHERE office = '$office'";
+
+	$array = array();
+	$dr_result = mysqli_query($db, $dr_query);
+	while ($row = mysqli_fetch_assoc($dr_result)) {
+		$array[] = $row['delivery_receipt_no'];
+	}
+
 ?>
 <html>
 <head>
@@ -63,6 +73,49 @@
 	window.addEventListener('keypress', goAway, true);
 
 	goAway();
+
+	var list_delivery_no = new Array();
+	<?php foreach($array as $key => $val){ ?>
+        list_delivery_no.push('<?php echo $val; ?>');
+    <?php } ?>
+
+  //   function deliveryNoExist(number) {
+
+  //   	var submit = document.getElementById('submit');
+
+  //   	// alert(list_delivery_no);
+  //   	var a = list_delivery_no.indexOf(number);
+  //   	document.getElementById("demo").innerHTML = a;
+  //   	setTimeout(function () {
+		// 	if(list_delivery_no.indexOf(number) == -1){
+		// 		// submit.disabled = false;
+		// 		// a.style.display = "block";
+		// 		 document.getElementById("demo").innerHTML = a;
+		// 	}else{
+		// 		submit.disabled = true;
+		// 		// a.style.display = "none";
+		// 	}
+		// }, 0);
+  //   }
+
+	function compareValues(number) {
+		
+		var balance = document.getElementById('hidden_quantity').value;
+		var submit = document.getElementById('submit');
+		// var letters = /^[0-9a-zA-Z]+$/; 
+
+		setTimeout(function () {
+			if(+number > +balance || isNaN(number)){
+				submit.disabled = true;
+				// a.style.display = "block";
+			}else{
+				submit.disabled = false;
+				// a.style.display = "none";
+			}
+		}, 0);
+		// alert(ordered);
+	}
+
 
 </script>
 <style>
@@ -131,7 +184,7 @@ th, footer {
 
 </style>
 </head>
-<body>
+<body onload="compareValues('');">
 	<nav class="navbar navbar-default" id="primary-nav" style="background-color: white;">
 	<div class="container">
 		<div class="navbar-header">
@@ -165,7 +218,9 @@ th, footer {
 	<div id="wrapper">
 		<div id="content">
 			<form action="delivery_transaction_issue.php" method="post" class="form-inline">
+				<input type="hidden" id="hidden_quantity" value="<?php echo $purchase_row['quantity'] ?>">
 			<div class="row">
+				<!-- <p id="demo"></p> -->
 				<div class="col-md-12" style="text-align: center; background-color: #0884e4; color: white; padding: 10px; margin: -15px 0 15px 0;"><h3><strong>DR No. Issue Form</strong></h3>
 				</div>
 			</div>
@@ -208,7 +263,7 @@ th, footer {
 									echo number_format((float)getStock($db, $purchase_row['item_no'], $purchase_row['office']))." pcs";
 								}  
 							?>">
-						<input type="text" id="quantity" name="quantity" class="class_quantity form-control" autocomplete="off" placeholder="Pieces to be delivered" required>
+						<input type="text" id="quantity" name="quantity" class="class_quantity form-control" autocomplete="off" placeholder="Pieces to be delivered" onkeyup="compareValues(this.value)" required>
 					</div>
 				</div>
 			</div>
@@ -223,7 +278,7 @@ th, footer {
 			<hr>
 			<div class="row">
 				<div class="col-md-12">
-					<input type="submit" name="submit" value="Submit" class="btn btn-primary btn-block">
+					<input type="submit" name="submit" id="submit" value="Submit" class="btn btn-primary btn-block">
 					<a href="delivery_transaction.php" class="btn btn-warning btn-block">Cancel</a>
 				</div>
 			</div>
@@ -245,15 +300,51 @@ th, footer {
 
 	if(isset($_POST['submit'])){
 
-		$purchase_order_no = $purchase_row['purchase_order_no'];
-		$item_no = $purchase_row['item_no'];
 		$delivery_no = $_POST['dr_no'];
+		$item_no = $purchase_row['item_no'];
 		$quantity = $_POST['quantity'];
+		$client = $purchase_row['client_name'];
+		$address = $purchase_row['address'];
+		$contact = $purchase_row['contact_person'];
+		$contact_no = $purchase_row['contact_no'];
 		$gate_pass_no = $_POST['gate_pass_no'];
+		$po_no = $purchase_row['purchase_order_no'];
+		$datetime = date("Y/m/d H:i:s");
+		$plant = ucfirst($purchase_row['office']);
 
-		$reply = array('post' => $_POST, 'row' => $purchase_row);
 
-		echo json_encode($reply);
+		$delivery_insert = "INSERT INTO delivery(delivery_receipt_no, item_no, quantity, client_name, address, contact, contact_no, gate_pass, po_no_delivery, date_delivery, office, remarks, fk_po_id) 
+							VALUES('$delivery_no','$item_no','$quantity','$client','$address','$contact','$contact_no','$gate_pass_no','$po_no','$datetime','$office','On Delivery','$purchase_id')";
+
+		$history_query = "INSERT INTO history(table_report, transaction_type, detail, history_date, office) 
+		 					VALUES('Delivery','Issued DR No.','$plant issued DR No. $delivery_no with P.O. No. $po_no and ".$_POST['quantity']." pcs of $item_no and ready to deliver to $client','$datetime','$office')";
+
+		$purchase_order_update = "UPDATE purchase_order SET balance = balance - '$quantity'
+									WHERE purchase_id = '$purchase_id'";
+
+
+
+		// echo $delivery_insert."<br>";
+		// echo $history_query."<br>";
+		// echo $purchase_order_update."<br>";
+
+		if(!in_array($delivery_no, $array)){
+			// echo "NOT EXISTS";
+			if(mysqli_query($db, $delivery_insert) && mysqli_query($db, $history_query) && mysqli_query($db, $purchase_order_update)){
+				phpAlert("Delivery No. $delivery_no issued successfully!! Transaction can be viewed on Delivery Report Page");
+				// header("delivery_transaction.php");
+				echo "<meta http-equiv='refresh' content='0'>";
+			}else{
+				phpAlert("Something went wrong!!");
+			}
+		}else{
+			// echo "EXISTS";
+			phpAlert("DR No. already exists!!");
+			echo "<meta http-equiv='refresh' content='0'>";
+		}	
+
+		// $reply = array('post' => $_POST, 'row' => $purchase_row);
+		// echo json_encode($reply);
 	}
 
 ?>
