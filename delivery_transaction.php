@@ -606,7 +606,7 @@ th, footer {
 	 			FROM purchase_order p, batch_list l
 	 			WHERE p.item_no = l.item_no 
 	 			AND p.balance != 0 ".$string." ".$string_date."
-				ORDER BY date_purchase DESC";
+				ORDER BY purchase_id DESC";
 
 	$result = mysqli_query($db, $query);
 	$count = mysqli_num_rows($result);
@@ -639,13 +639,19 @@ th, footer {
 <?php if($office == 'head'){ ?>
 								<td class='col-md-1'><strong>Pending</strong></td>
 <?php }else{ ?>
-								<td class='col-md-1'><button type='button' class='btn btn-success btn-sm' data-toggle='modal' data-target='#myModal<?php echo $hash;?>' style='float: center'>Issue DR No.</button>
+								<!-- <td class='col-md-1'><button type='button' class='btn btn-success btn-sm' data-toggle='modal' data-target='#myModal<?php echo $hash;?>' style='float: center'>Issue DR No.</button> -->
+								<td class='col-md-1'>
+									<form action="delivery_transaction_issue.php" method="post">
+										<input type="hidden" name="post_delivery_purchase_id" value="<?php echo $row['purchase_id']; ?>">
+   										<input type="submit" value="Issue DR No." class="btn btn-success btn-xs" style="margin-bottom: 5px;">
+									</form>
+								</td>
 <?php } ?>
 							<!-- Modal -->
-								<div class="modal fade" id="myModal<?php echo $hash;?>" role="dialog">
+								<!-- <div class="modal fade" id="myModal<?php echo $hash;?>" role="dialog">
 									<div class="modal-dialog modal-sm">
 
-									<!-- Modal content-->
+									
 									<form action="delivery_transaction.php" method="post" class="class_form">
 										<div class="modal-content">
 											<div class="modal-header">
@@ -682,7 +688,7 @@ th, footer {
 																echo number_format((float)getStock($db, $row['item_no'], $row['office']))." pcs";
 															}  
 														?>">
-													<input type="text" id="quantity" name="quantity" class="class_quantity form-control autocomplete="off" required>
+													<input type="text" id="quantity" name="quantity" class="class_quantity form-control" autocomplete="off" required>
 												</div>
 
 											</div>
@@ -693,8 +699,7 @@ th, footer {
 										</div>
 									</form>
 									</div>
-								</div>
-								</td>
+								</div> -->
 							</tr>
 <?php
 		$hash++;
@@ -768,7 +773,7 @@ th, footer {
 	 			FROM purchase_order p, batch_list l
 	 			WHERE p.item_no = l.item_no".$string."
 	 			AND p.balance != 0
-				ORDER BY date_purchase DESC";
+				ORDER BY purchase_id DESC";
 
 	$result = mysqli_query($db, $query);
 
@@ -802,13 +807,18 @@ th, footer {
 <?php if($office == 'head'){ ?>
 								<td class='col-md-1'><strong>Pending</strong></td>
 <?php }else{ ?>
-								<td class='col-md-1'><button type='button' class='btn btn-success btn-sm' data-toggle='modal' data-target='#myModal<?php echo $hash;?>' style='float: center'>Issue DR No.</button>
+								<td class='col-md-1'>
+									<!-- <button type='button' class='btn btn-success btn-sm' data-toggle='modal' data-target='#myModal<?php echo $hash;?>' style='float: center'>Issue DR No.</button> -->
+									<form action="delivery_transaction_issue.php" method="post">
+										<input type="hidden" name="post_delivery_purchase_id" value="<?php echo $row['purchase_id']; ?>">
+   										<input type="submit" value="Issue DR No." class="btn btn-success btn-xs" style="margin-bottom: 5px;">
+									</form>
 <?php } ?>
 							<!-- Modal -->
-								<div class="modal fade" id="myModal<?php echo $hash;?>" role="dialog">
+								<!-- <div class="modal fade" id="myModal<?php echo $hash;?>" role="dialog">
 									<div class="modal-dialog modal-sm">
 
-									<!-- Modal content-->
+									
 									<form action="delivery_transaction.php" method="post" class="class_form">
 										<div class="modal-content">
 											<div class="modal-header">
@@ -855,7 +865,7 @@ th, footer {
 										</div>
 									</form>
 									</div>
-								</div>
+								</div> -->
 								</td>
 							</tr>
 <?php

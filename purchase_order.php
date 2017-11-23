@@ -470,7 +470,7 @@ th, footer {
 								</th>
 							</tr> -->
 							<tr>
-								<th colspan="10"><h3>Pending Orders</h3></th>
+								<th colspan="10"><h3>Purchase Orders</h3></th>
 							</tr>
 							<tr class="filterable">
 								<th colspan="1">Plant: <?php echo ucfirst($search_plant); ?></th>
@@ -504,7 +504,7 @@ th, footer {
 	 			WHERE p.item_no = l.item_no 
 	 			AND p.balance != 0 ".$string." ".$string_date."
 	 			AND DATE_FORMAT(date_purchase,'%Y-%m-%d') != ''
-				ORDER BY date_purchase DESC, purchase_id DESC";
+				ORDER BY purchase_id DESC";
 // echo $query;
 	$result = mysqli_query($db, $query);
 	if(mysqli_num_rows($result) > 0){
@@ -522,13 +522,21 @@ th, footer {
 								<td class='col-md-1'><strong><?php echo $row['contact_no']; ?></strong></td>
 								<td class='col-md-1'><strong><?php echo $row['date_purchase']; ?></strong></td>
 								<td class='col-md-1'>
-									<strong><?php echo $row['remarks']; ?></strong>
+									
 <?php
 	if($office == 'head'){
 ?>
+									<form action="purchase_order_update.php" method="post">
+										<input type="hidden" name="post_purchase_id" value="<?php echo $row['purchase_id']; ?>">
+   										<input type="submit" value="Update" class="btn btn-warning btn-xs" style="margin-bottom: 5px;">
+									</form>
 									<form action="purchase_order.php" method="post">
 										<button type="submit" id="cancel" name="cancel" value="<?php echo $row['purchase_id']; ?>" class="btn btn-danger btn-xs" onclick="return confirm('Do you want to cancel Purchase Order No. <?php echo $row['purchase_order_no']; ?> with item <?php echo $row['item_no'] ?>?')">Cancel Order?</button>
 									</form>
+<?php
+	}else{
+?>
+									<strong><?php echo $row['remarks']; ?></strong>
 <?php
 	}
 ?>								
@@ -568,7 +576,7 @@ th, footer {
 								</th>
 							</tr> -->
 							<tr>
-								<th colspan="10"><h3>Pending Orders</h3></th>
+								<th colspan="10"><h3>Purchase Orders</h3></th>
 							</tr>
 							<tr class="filterable">
 								<th colspan="1">Plant: <?php echo ucfirst($search_plant); ?></th>
@@ -601,7 +609,7 @@ th, footer {
 	 			FROM purchase_order p, batch_list l
 	 			WHERE p.item_no = l.item_no 
 	 			AND p.balance != 0 ".$string."
-				ORDER BY date_purchase DESC, purchase_id DESC";
+				ORDER BY purchase_id DESC";
 
 	$result = mysqli_query($db, $query);
 	if(mysqli_num_rows($result) > 0){
@@ -619,13 +627,20 @@ th, footer {
 								<td class='col-md-1'><strong><?php echo $row['contact_no']; ?></strong></td>
 								<td class='col-md-1'><strong><?php echo $row['date_purchase']; ?></strong></td>
 								<td class='col-md-1'>
-									<strong><?php echo $row['remarks']; ?></strong>
 <?php
 	if($office == 'head'){
 ?>
+									<form action="purchase_order_update.php" method="post">
+										<input type="hidden" name="post_purchase_id" value="<?php echo $row['purchase_id']; ?>">
+   										<input type="submit" value="Update" class="btn btn-warning btn-xs" style="margin-bottom: 5px;">
+									</form>
 									<form action="purchase_order.php" method="post">
 										<button type="submit" id="cancel" name="cancel" value="<?php echo $row['purchase_id']; ?>" class="btn btn-danger btn-xs" onclick="return confirm('Do you want to cancel Purchase Order No. <?php echo $row['purchase_order_no']; ?> with item <?php echo $row['item_no'] ?>?')">Cancel Order?</button>
 									</form>
+<?php
+	}else{
+?>
+									<strong><?php echo $row['remarks']; ?></strong>
 <?php
 	}
 ?>	

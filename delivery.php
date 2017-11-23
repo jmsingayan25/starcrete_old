@@ -513,7 +513,7 @@ hr{
 	$query = "SELECT *, FORMAT(quantity,0) as quantity, DATE_FORMAT(date_delivery,'%m/%d/%y') as date_delivery
 				FROM delivery ".$string." ".$string_date."
 				AND remarks = 'On Delivery' 
-				ORDER BY date_delivery DESC, delivery_receipt_no DESC, office DESC";
+				ORDER BY delivery_id DESC, office DESC";
  
 	$result = mysqli_query($db, $query);
 	if(mysqli_num_rows($result) > 0){
@@ -540,7 +540,11 @@ hr{
 			}else{
 ?>
 								<td class="col-md-1">
-									<button type='button' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#myModal<?php echo $hash; ?>' style='float: center;margin-bottom: 3px; width: 85px;'>Update Item</button>
+									<form action="delivery_update.php" method="post">
+										<input type="hidden" name="post_delivery_id" value="<?php echo $row['delivery_id']; ?>">
+   										<input type="submit" value="Update Info" class="btn btn-warning btn-xs" style="margin-bottom: 4px;">
+									</form>
+									<!-- <button type='button' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#myModal<?php echo $hash; ?>' style='float: center;margin-bottom: 3px; width: 85px;'>Update Item</button>
 
 									<form action="delivery.php" method="post">
 										<div class="modal fade" id="myModal<?php echo $hash;?>" role="dialog">
@@ -551,7 +555,7 @@ hr{
 														<h4 class="modal-title">Delivery Details</h4>
 													</div>
 													<div class="modal-body" style="text-align: left;">
-														<!-- <input type="hidden" id="hidden_id" name="hidden_id" value="<?php echo $row['delivery_id']; ?>"> -->
+														<input type="hidden" id="hidden_id" name="hidden_id" value="<?php echo $row['delivery_id']; ?>">
 														<input type="hidden" id="hidden_fk_id" name="hidden_fk_id" value="<?php echo $row['fk_po_id']; ?>">
 														<input type="hidden" id="hidden_dr_no" name="hidden_dr_no" value="<?php echo $row['delivery_receipt_no']; ?>">
 														<input type="hidden" id="hidden_item_no" name="hidden_item_no" value="<?php echo $row['item_no']; ?>">
@@ -561,20 +565,40 @@ hr{
 														<input type="hidden" id="quantity_order" name="quantity_order" class="form-control" value="<?php echo $row['quantity'] ?>">
 														<div class="row">
 															<div class="col-md-6">
-																<label>DR No.</label>
+																<label>P.O. No.</label>
 															</div>
 															<div class="col-md-6">
-																<!-- <strong><?php echo $row['delivery_receipt_no'] ?></strong> -->
+																<strong><?php echo $row['po_no_delivery'] ?></strong>
+															</div>
+														</div>
+														<hr>
+														<div class="row">
+															<div class="col-md-6">
+																<label>DR No.</label>
+															</div>
+															<div class="col-md-6" style="padding-bottom: 15px;"> -->
+																<!-- <strong><?php echo $row['delivery_receipt_no'] ?></strong>
 																<input type="text" name="update_delivery_receipt_no" value="<?php echo $row['delivery_receipt_no'] ?>" class="form-control">
 															</div>
 														</div>
 														<hr>
 														<div class="row">
 															<div class="col-md-6">
-																<label>P.O. No.</label>
+																<label>Gate Pass</label>
 															</div>
+															<div class="col-md-6" style="padding-bottom: 15px;">
+																<strong><?php echo $row['gate_pass'] ?></strong> -->
+																<!-- <input type="text" name="update_gate_pass" value="<?php echo $row['gate_pass'] ?>" class="form-control">
+															</div>
+														</div>
+														<hr>
+														<div class="row">
 															<div class="col-md-6">
-																<strong><?php echo $row['po_no_delivery'] ?></strong>
+																<label>Quantity</label>
+															</div>
+															<div class="col-md-6" style="padding-bottom: 15px;"> -->
+																<!-- <strong><?php echo $row['quantity'] ?></strong> -->
+																<!-- <input type="text" name="update_quantity" value="<?php echo str_replace(',','',$row['quantity']); ?>" class="form-control">
 															</div>
 														</div>
 														<hr>
@@ -591,8 +615,8 @@ hr{
 															<div class="col-md-6">
 																<label>New Item</label>
 															</div>
-															<div class="col-md-6">
-																<!-- <input list="update_items" name="update_item" size="10" required>
+															<div class="col-md-6"> -->
+									 							<!-- <input list="update_items" name="update_item" size="10" required>
 																<datalist id="update_items">
 <?php
 	$item_sql = "SELECT item_no FROM batch_list
@@ -603,7 +627,7 @@ hr{
 	}
 ?>
 																</datalist> -->
-																<select id="update_item" name="update_item" class="form-control" required>
+																<!-- <select id="update_item" name="update_item" class="form-control" required>
 																	<option value="">Select</option>
 <?php
 	$item_sql = "SELECT item_no FROM batch_list
@@ -624,7 +648,7 @@ hr{
 												</div>
 											</div>
 										</div>
-									</form>
+									</form> -->
 						 				<button type="submit" class='btn btn-xs btn-success' style="margin-bottom: 3px; width: 85px;" data-toggle='modal' data-target='#deliveryModal<?php echo $hash; ?>'>Delivered</button>
 						 				
 						 				<form action="delivery.php" method="post">
@@ -827,7 +851,7 @@ hr{
 	$query = "SELECT *, FORMAT(quantity,0) as quantity, DATE_FORMAT(date_delivery,'%m/%d/%y') as date_delivery 
 				FROM delivery ".$string." 
 				AND remarks = 'On Delivery' 
-				ORDER BY date_delivery DESC, delivery_receipt_no DESC, office DESC";
+				ORDER BY delivery_id DESC, office DESC";
     
 	$result = mysqli_query($db, $query);
 	if(mysqli_num_rows($result) > 0){
@@ -854,7 +878,11 @@ hr{
 			}else{
 ?>
 								<td class="col-md-1">
-									<button type='button' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#myModal<?php echo $hash; ?>' style='float: center;margin-bottom: 3px; width: 85px;'>Update Item</button>
+									<form action="delivery_update.php" method="post">
+										<input type="hidden" name="post_delivery_id" value="<?php echo $row['delivery_id']; ?>">
+   										<input type="submit" value="Update Info" class="btn btn-warning btn-xs" style="margin-bottom: 4px;">
+									</form>
+									<!-- <button type='button' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#myModal<?php echo $hash; ?>' style='float: center;margin-bottom: 3px; width: 85px;'>Update Item</button>
 
 									<form action="delivery.php" method="post">
 										<div class="modal fade" id="myModal<?php echo $hash;?>" role="dialog">
@@ -864,9 +892,9 @@ hr{
 													<div class="modal-header">
 														<h4 class="modal-title">Delivery Details</h4>
 													</div>
-													<div class="modal-body" style="text-align: left;">
+													<div class="modal-body" style="text-align: left;"> -->
 														<!-- <input type="hidden" id="hidden_id" name="hidden_id" value="<?php echo $row['delivery_id']; ?>"> -->
-														<input type="hidden" id="hidden_fk_id" name="hidden_fk_id" value="<?php echo $row['fk_po_id']; ?>">
+														<!-- <input type="hidden" id="hidden_fk_id" name="hidden_fk_id" value="<?php echo $row['fk_po_id']; ?>">
 														<input type="hidden" id="hidden_dr_no" name="hidden_dr_no" value="<?php echo $row['delivery_receipt_no']; ?>">
 														<input type="hidden" id="hidden_item_no" name="hidden_item_no" value="<?php echo $row['item_no']; ?>">
 														<input type="hidden" id="hidden_client" name="hidden_client" value="<?php echo $row['client_name']; ?>">
@@ -875,20 +903,40 @@ hr{
 														<input type="hidden" id="quantity_order" name="quantity_order" class="form-control" value="<?php echo $row['quantity'] ?>">
 														<div class="row">
 															<div class="col-md-6">
-																<label>DR No.</label>
+																<label>P.O. No.</label>
 															</div>
-															<div class="col-md-6" style="padding-bottom: 15px;">
-																<!-- <strong><?php echo $row['delivery_receipt_no'] ?></strong> -->
-																<input type="text" name="update_delivery_receipt_no" value="<?php echo $row['delivery_receipt_no'] ?>" class="form-control">
+															<div class="col-md-6">
+																<strong><?php echo $row['po_no_delivery'] ?></strong>
 															</div>
 														</div>
 														<hr>
 														<div class="row">
 															<div class="col-md-6">
-																<label>P.O. No.</label>
+																<label>DR No.</label>
 															</div>
+															<div class="col-md-6" style="padding-bottom: 15px;"> -->
+																<!-- <strong><?php echo $row['delivery_receipt_no'] ?></strong> -->
+																<!-- <input type="text" name="update_delivery_receipt_no" value="<?php echo $row['delivery_receipt_no'] ?>" class="form-control">
+															</div>
+														</div>
+														<hr>
+														<div class="row">
 															<div class="col-md-6">
-																<strong><?php echo $row['po_no_delivery'] ?></strong>
+																<label>Gate Pass</label>
+															</div>
+															<div class="col-md-6" style="padding-bottom: 15px;"> -->
+																<!-- <strong><?php echo $row['gate_pass'] ?></strong> -->
+																<!-- <input type="text" name="update_gate_pass" value="<?php echo $row['gate_pass'] ?>" class="form-control">
+															</div>
+														</div>
+														<hr>
+														<div class="row">
+															<div class="col-md-6">
+																<label>Quantity</label>
+															</div>
+															<div class="col-md-6" style="padding-bottom: 15px;"> -->
+																<!-- <strong><?php echo $row['quantity'] ?></strong> -->
+																<!-- <input type="text" name="update_quantity" value="<?php echo str_replace(',','',$row['quantity']); ?>" class="form-control">
 															</div>
 														</div>
 														<hr>
@@ -905,7 +953,7 @@ hr{
 															<div class="col-md-6">
 																<label>New Item</label>
 															</div>
-															<div class="col-md-6">
+															<div class="col-md-6"> -->
 																<!-- <input list="update_items" name="update_item" size="10" required>
 																<datalist id="update_items">
 <?php
@@ -917,7 +965,7 @@ hr{
 	}
 ?>
 																</datalist> -->
-																<select id="update_item" name="update_item" class="form-control" required>
+																<!-- <select id="update_item" name="update_item" class="form-control" required>
 																	<option value="">Select</option>
 <?php
 	$item_sql = "SELECT item_no FROM batch_list
@@ -938,7 +986,7 @@ hr{
 												</div>
 											</div>
 										</div>
-									</form>
+									</form> -->
 										<button type="submit" class='btn btn-xs btn-success' style="margin-bottom: 3px; width: 85px;" data-toggle='modal' data-target='#deliveryModal<?php echo $hash; ?>'>Delivered</button>
 						 				
 						 				<form action="delivery.php" method="post">
@@ -1246,8 +1294,10 @@ hr{
 	}else if(isset($_POST['update'])){
 
 
-		// $delivery_id = $_POST['hidden_id'];
-		$delivery_id = $_POST['update_delivery_receipt_no'];
+		$delivery_id = $_POST['hidden_id'];
+		$new_delivery_receipt_no = $_POST['update_delivery_receipt_no'];
+		$new_quantity = $_POST['update_quantity'];
+		$new_gate_pass = $_POST['update_gate_pass'];
 		$delivery_receipt_no = $_POST['hidden_dr_no'];
 		$fk_po_id = $_POST['hidden_fk_id'];
 		$prev_item_no = $_POST['hidden_item_no'];
@@ -1256,10 +1306,14 @@ hr{
 		$datetime = date("Y/m/d H:i:s");
 		//$office = ucfirst($office);
 
-		$sql = "UPDATE delivery SET item_no = '$update_item_no' WHERE delivery_id = '$delivery_id' AND delivery_receipt_no = '$delivery_receipt_no' AND fk_po_id = '$fk_po_id' AND office = '$office'";
+		$sql = "UPDATE delivery SET item_no = '$update_item_no', delivery_receipt_no = '$new_delivery_receipt_no', quantity = '$new_quantity', gate_pass = '$new_gate_pass' WHERE delivery_id = '$delivery_id' AND delivery_receipt_no = '$delivery_receipt_no' AND fk_po_id = '$fk_po_id' AND office = '$office'";
+
+		// $sql = "UPDATE delivery SET item_no = '$update_item_no' WHERE delivery_id = '$delivery_id' AND delivery_receipt_no = '$delivery_receipt_no' AND fk_po_id = '$fk_po_id' AND office = '$office'";
+
+		$history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no information','$datetime','$office')";
 
 		// update item only
-		$history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no item $prev_item_no to $update_item_no to be delivered to $client','$datetime','$office')";
+		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no item $prev_item_no to $update_item_no to be delivered to $client','$datetime','$office')";
 
 		// // update DR No. only
 		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No.' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id','$datetime','$office')";
@@ -1268,7 +1322,7 @@ hr{
 		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item Quantity' ,'$update_item_no','".ucfirst($office)." changed item quantity of $prev_item_no to $quantity under DR No. $delivery_receipt_no','$datetime','$office')";
 
 		// update gatepass only
-		$history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No. and Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and item $prev_item_no to $update_item_no','$datetime','$office')";
+		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No. and Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and item $prev_item_no to $update_item_no','$datetime','$office')";
 		
 		// // update quantity and DR no only
 		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item Quantity and DR No.' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and quantity of item $prev_item_no to $quantity','$datetime','$office')";
@@ -1286,14 +1340,14 @@ hr{
 
 
 
-		// echo $sql;
-		// echo $history;
+		echo $sql;
+		echo $history;
 
-		if(mysqli_query($db, $sql) && mysqli_query($db, $history)){
-			phpAlert("Item has been updated!!!");
-			echo "<meta http-equiv='refresh' content='0'>";
-		}else{
-			phpAlert("Something went wrong!!!");
-		}
+		// if(mysqli_query($db, $sql) && mysqli_query($db, $history)){
+		// 	phpAlert("Item has been updated!!!");
+		// 	echo "<meta http-equiv='refresh' content='0'>";
+		// }else{
+		// 	phpAlert("Something went wrong!!!");
+		// }
 	}
 ?>
