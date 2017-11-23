@@ -60,24 +60,10 @@
 	<script type="text/javascript" src="js_ext/sidebar.js"></script>
 <script>
 
-	var timer = null;
-
-	function goAway() {
-	    clearTimeout(timer);
-	    timer = setTimeout(function() {
-	        window.location.reload(true);
-	    }, 60000);
-	}
-
-	window.addEventListener('mousemove', goAway, true);
-	window.addEventListener('keypress', goAway, true);
-
-	goAway();
-
-	var list_delivery_no = new Array();
-	<?php foreach($array as $key => $val){ ?>
-        list_delivery_no.push('<?php echo $val; ?>');
-    <?php } ?>
+	// var list_delivery_no = new Array();
+	// <?php foreach($array as $key => $val){ ?>
+ //        list_delivery_no.push('<?php echo $val; ?>');
+ //    <?php } ?>
 
   //   function deliveryNoExist(number) {
 
@@ -331,9 +317,9 @@ th, footer {
 		if(!in_array($delivery_no, $array)){
 			// echo "NOT EXISTS";
 			if(mysqli_query($db, $delivery_insert) && mysqli_query($db, $history_query) && mysqli_query($db, $purchase_order_update)){
-				phpAlert("Delivery No. $delivery_no issued successfully!! Transaction can be viewed on Delivery Report Page");
-				// header("delivery_transaction.php");
-				echo "<meta http-equiv='refresh' content='0'>";
+				echo "<script> alert('Delivery No. $delivery_no issued successfully!! Transaction can be viewed on Delivery Report Page');
+					window.location.href='delivery_transaction.php'
+					</script>";
 			}else{
 				phpAlert("Something went wrong!!");
 			}
