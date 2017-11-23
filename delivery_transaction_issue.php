@@ -44,9 +44,9 @@
 <head>
 <?php
 	if($office == 'delta'){
-		echo "<title>Pending Orders - Delivery Report - Quality Star Concrete Products, Inc.</title>";
+		echo "<title>Update Order - Delivery Report - Quality Star Concrete Products, Inc.</title>";
 	}else{
-		echo "<title>Pending Orders - Delivery Report - Starcrete Manufacturing Corporation</title>";
+		echo "<title>Update Order - Delivery Report - Starcrete Manufacturing Corporation</title>";
 	}
 ?>
 	<meta charset="utf-8">

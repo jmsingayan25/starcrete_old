@@ -318,7 +318,7 @@ th, footer {
 	<div id="wrapper" onclick="closeNav();">
 		<div id="content">
 			<form action="purchase_order_cancelled.php" method="post" class="form-inline">
-			<div class="row" style="margin: 0px;">
+			<div class="row" style="margin: 0px; margin-bottom: 5px;">
 				<div class="col-md-5">
 <?php
 	if($office == 'head'){
@@ -454,9 +454,9 @@ th, footer {
 									Date: <?php echo date_format($date_view,"F d, Y"); ?>
 								</th>
 							</tr> -->
-							<tr>
+							<!-- <tr>
 								<th colspan="10"><h3>Cancelled Orders</h3></th>
-							</tr>
+							</tr> -->
 							<tr class="filterable">
 								<th colspan="1">Plant: <?php echo ucfirst($search_plant); ?></th>
 								<th colspan="9">
@@ -539,9 +539,9 @@ th, footer {
 ?>
 					<table class="table table-striped">
 						<thead>
-							<tr>
+							<!-- <tr>
 								<th colspan="10"><h3>Cancelled Orders</h3></th>
-							</tr>
+							</tr> -->
 							<tr class="filterable">
 								<th colspan="1">Plant: <?php echo ucfirst($search_plant); ?></th>
 								<th colspan="9">

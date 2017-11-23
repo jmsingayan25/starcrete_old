@@ -415,9 +415,9 @@ th, footer {
 ?>
 					<table class="table table-striped">
 						<thead>
-							<tr>
+							<!-- <tr>
 								<th colspan="11"><h3>Delivered Orders</h3></th>
-							</tr>
+							</tr> -->
 							<tr class="filterable">
 								<th colspan="1">Plant: <?php echo ucfirst($search_plant); ?></th>
 								<th colspan="7">
@@ -490,9 +490,9 @@ th, footer {
 ?>
 					<table class="table table-striped">
 						<thead>
-							<tr>
+							<!-- <tr>
 								<th colspan="11"><h3>Delivered Orders</h3></th>
-							</tr>
+							</tr> -->
 							<tr class="filterable">
 								<th colspan="1">Plant: <?php echo ucfirst($search_plant); ?></th>
 								<th colspan="7">
