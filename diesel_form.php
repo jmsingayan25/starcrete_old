@@ -256,10 +256,12 @@ th, footer {
 				phpAlert("Transaction complete!!");
 				echo "<meta http-equiv='refresh' content='0'>";
 			}else{
-				phpAlert("Something went wrong!!");
+				phpAlert('Something went wrong. Please try again.');
+				echo "<meta http-equiv='refresh' content='0'>";
 			}
 		}else{
-			phpAlert("Something went wrong!!");
+			phpAlert('Something went wrong. Please try again.');
+			echo "<meta http-equiv='refresh' content='0'>";
 		}
 	}
 ?>

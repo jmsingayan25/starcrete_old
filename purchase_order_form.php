@@ -417,7 +417,7 @@ th, footer {
 					phpAlert("$item[$i] successfully added!!");
 					echo "<meta http-equiv='refresh' content='0'>";
 				}else{
-					phpAlert("Something went wrong!!");
+					phpAlert('Something went wrong. Please try again.');
 				}
 			}
 		}

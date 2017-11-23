@@ -25,9 +25,9 @@
 <head>
 <?php
 	if($office == 'delta'){
-		echo "<title>On Delivery Orders - Delivery Report - Quality Star Concrete Products, Inc.</title>";
+		echo "<title>Delivery Report - Quality Star Concrete Products, Inc.</title>";
 	}else{
-		echo "<title>On Delivery Orders - Delivery Report - Starcrete Manufacturing Corporation</title>";
+		echo "<title>Delivery Report - Starcrete Manufacturing Corporation</title>";
 	}
 ?>
 	<meta charset="utf-8">
@@ -338,7 +338,7 @@ hr{
 	<div id="wrapper" onclick="closeNav();">
 		<div id="content">
 			<form action="delivery.php" method="post" class="form-inline">
-			<div class="row" style="margin: 0px;">
+			<div class="row" style="margin: 0px; margin-bottom: 5px;">
 				<div class="col-md-6">
 					<!-- <form action="delivery.php" method="post" class="form-inline"> -->
 <?php

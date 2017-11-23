@@ -291,7 +291,7 @@ th, footer {
 	<div id="wrapper" onclick="closeNav();">
 		<div id="content">
 			<form action="delivery_backload.php" method="post" class="form-inline">
-			<div class="row" style="margin: 0px;">
+			<div class="row" style="margin: 0px; margin-bottom: 5px;">
 				<div class="col-md-5">
 					<div class="pull-left">
 					
