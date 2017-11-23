@@ -133,7 +133,7 @@ th, footer {
 	<nav class="navbar navbar-default" id="secondary-nav" style="background-color: #0884e4; margin-bottom: 10px;">
 		<div class="container-fluid">
 			<span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span>
-			<span style="font-size:25px; color: white;">Purchase Order > Update</span>
+			<span style="font-size:25px; color: white;"><a href="purchase_order.php" style="color: white;">Purchase Order</a> > Update</span>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white; background-color: #0884e4;">Welcome! <strong><?php echo ucfirst($user['firstname']); ?></strong><span class="caret"></span></a>
