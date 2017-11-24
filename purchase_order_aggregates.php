@@ -280,7 +280,7 @@ th, footer {
 	<nav class="navbar navbar-default" id="secondary-nav" style="background-color: #0884e4; margin-bottom: 10px;">
 		<div class="container-fluid">
 			<span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span>
-			<span style="font-size:25px; color: white;">Purchase Order Aggregates > Pending Orders</span>
+			<span style="font-size:25px; color: white;">Purchase Order Aggregates</span>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white; background-color: #0884e4;">Welcome! <strong><?php echo ucfirst($user['firstname']); ?></strong><span class="caret"></span></a>
@@ -295,7 +295,7 @@ th, footer {
 	<div id="wrapper" onclick="closeNav();">
 		<div id="content">
 			<form action="purchase_order_aggregates.php" method="post" class="form-inline">
-			<div class="row" style="margin: 0px;">
+			<div class="row" style="margin: 0px; margin-bottom: 5px;">
 				<div class="col-md-5">
 					
 <?php
@@ -420,9 +420,9 @@ th, footer {
 								<th class="col-md-1">Date Ordered</th>
 								<th class="col-md-1">Status</th>
 							</tr> -->
-							<tr>
+							<!-- <tr>
 								<th colspan="8"><h3>Pending Orders</h3></th>
-							</tr>
+							</tr> -->
 							<tr class="filterable">
 								<th colspan="1" style="text-align: left;">Plant: <?php echo ucfirst($search_plant); ?></th>
 								<th colspan="7">
@@ -543,9 +543,9 @@ th, footer {
 								<th class="col-md-1">Date Ordered</th>
 								<th class="col-md-1">Status</th>
 							</tr> -->
-							<tr>
+							<!-- <tr>
 								<th colspan="8"><h3>Pending Orders</h3></th>
-							</tr>
+							</tr> -->
 							<tr class="filterable">
 								<th colspan="1" style="text-align: left;">Plant: <?php echo ucfirst($search_plant); ?></th>
 								<th colspan="7">

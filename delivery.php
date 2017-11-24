@@ -142,7 +142,7 @@
 
 #content {
 	margin: 0 auto;
-	min-height: 820px;
+	min-height: 750px;
 	padding-bottom:20px; /* Height of the footer element */
 	padding-right: 15px;
 	padding-left: 15px;

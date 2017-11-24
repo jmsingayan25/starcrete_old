@@ -113,12 +113,12 @@ html, body {
 }
 
 #wrapper {
-	min-height:83%;
+	min-height:78%;
 	position:relative;
 }
 
 #content {
-	margin: 0 auto;
+	margin: 37px auto auto auto;
 	width: 40%;
 	padding-bottom:20px; /* Height of the footer element */
 	border: 1px solid #bababa;
@@ -171,6 +171,50 @@ th, footer {
 </style>
 </head>
 <body onload="compareValues('');">
+
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a href="index.php">Home</a>
+		<hr>
+<!-- 		<a href="stock.php">Stock Report</a>
+<?php
+	if($office == 'head'){
+?>		
+		<form action="batch_head_report.php" method="post">
+		<ul class="mainmenu">
+			<li><a href="#">Batch Report</a>
+				<ul class="submenu">
+					<li>
+						<a href="batch_head_report.php?hidden_office=bravo" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Bravo</a>
+					</li>
+					<li>
+						<a href="batch_head_report.php?hidden_office=delta" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Delta</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		</form>
+<?php
+	}else{
+?>
+		<a href="batch.php">Batch Report</a>
+<?php
+	}
+?>
+		<a href="diesel.php">Diesel Report</a> -->
+<?php
+	if($position != 'warehouseman')
+		echo "<a href='purchase_order.php'>Issued Purchase Order</a>"
+?>
+<!-- 		<a href='purchase_order.php'>Issued Purchase Order</a> -->
+		<a href="delivery.php">Issued Delivery Receipt</a>
+		<!-- <a href='purchase_order_aggregates.php'>Issued Purchase Order Aggregates</a> -->
+		<!-- <a href="received.php">Received Order</a> -->
+		<!-- <a href="transmittal.php">Transmittal</a> -->
+		<hr>
+		<a href="#">About Us</a>
+	</div>
+
 	<nav class="navbar navbar-default" id="primary-nav" style="background-color: white;">
 	<div class="container">
 		<div class="navbar-header">
@@ -286,14 +330,14 @@ th, footer {
 
 	if(isset($_POST['submit'])){
 
-		$delivery_no = $_POST['dr_no'];
+		$delivery_no = mysqli_real_escape_string($db, $_POST['dr_no']);
 		$item_no = $purchase_row['item_no'];
-		$quantity = $_POST['quantity'];
+		$quantity = mysqli_real_escape_string($db, $_POST['quantity']);
 		$client = $purchase_row['client_name'];
 		$address = $purchase_row['address'];
 		$contact = $purchase_row['contact_person'];
 		$contact_no = $purchase_row['contact_no'];
-		$gate_pass_no = $_POST['gate_pass_no'];
+		$gate_pass_no = mysqli_real_escape_string($db, $_POST['gate_pass_no']);
 		$po_no = $purchase_row['purchase_order_no'];
 		$datetime = date("Y/m/d H:i:s");
 		$plant = ucfirst($purchase_row['office']);
@@ -321,7 +365,8 @@ th, footer {
 					window.location.href='delivery_transaction.php'
 					</script>";
 			}else{
-				phpAlert("Something went wrong!!");
+				phpAlert('Something went wrong. Please try again.');
+				echo "<meta http-equiv='refresh' content='0'>";
 			}
 		}else{
 			// echo "EXISTS";

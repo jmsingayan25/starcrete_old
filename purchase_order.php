@@ -528,7 +528,7 @@ th, footer {
 ?>
 									<form action="purchase_order_update.php" method="post">
 										<input type="hidden" name="post_purchase_id" value="<?php echo $row['purchase_id']; ?>">
-   										<input type="submit" value="Update" class="btn btn-warning btn-xs" style="margin-bottom: 5px;">
+   										<input type="submit" value="Update Info" class="btn btn-warning btn-xs" style="margin-bottom: 5px;">
 									</form>
 									<form action="purchase_order.php" method="post">
 										<button type="submit" id="cancel" name="cancel" value="<?php echo $row['purchase_id']; ?>" class="btn btn-danger btn-xs" onclick="return confirm('Do you want to cancel Purchase Order No. <?php echo $row['purchase_order_no']; ?> with item <?php echo $row['item_no'] ?>?')">Cancel Order?</button>
@@ -632,7 +632,7 @@ th, footer {
 ?>
 									<form action="purchase_order_update.php" method="post">
 										<input type="hidden" name="post_purchase_id" value="<?php echo $row['purchase_id']; ?>">
-   										<input type="submit" value="Update" class="btn btn-warning btn-xs" style="margin-bottom: 5px;">
+   										<input type="submit" value="Update Info" class="btn btn-warning btn-xs" style="margin-bottom: 5px;">
 									</form>
 									<form action="purchase_order.php" method="post">
 										<button type="submit" id="cancel" name="cancel" value="<?php echo $row['purchase_id']; ?>" class="btn btn-danger btn-xs" onclick="return confirm('Do you want to cancel Purchase Order No. <?php echo $row['purchase_order_no']; ?> with item <?php echo $row['item_no'] ?>?')">Cancel Order?</button>

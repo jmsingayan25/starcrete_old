@@ -279,7 +279,7 @@
 
 #content {
 	margin: 0 auto;
-	min-height: 770px;
+	min-height: 790px;
 	padding-bottom:20px; /* Height of the footer element */
 	padding-right: 15px;
 	padding-left: 15px;
@@ -439,9 +439,10 @@ th, footer {
 
 	<div id="wrapper" onclick="closeNav();">
 		<div id="content">
+			<form action="delivery_transaction.php" method="post" class="form-inline">
 			<div class="row" style="margin: 0px; margin-bottom: 5px;">
 				<div class="col-md-6">
-					<form action="delivery_transaction.php" method="post" class="form-inline">
+					
 <?php
 	if($office == 'head'){
 ?>
@@ -469,9 +470,12 @@ th, footer {
 <?php
 	}
 ?>	
-						<input type="date" name="date_view" class="form-control" value="<?php if(isset($_POST['date_view'])) { echo htmlentities ($_POST['date_view']); }?>">
-						<input type="submit" name="search_received" id="search_received" value="Search" class="btn btn-primary">
-					</form>
+				</div>
+			</div>
+			<div class="row" style="margin: 0px; margin-bottom: 5px;">
+				<div class="col-md-6">
+					<input type="date" name="date_view" class="form-control" value="<?php if(isset($_POST['date_view'])) { echo htmlentities ($_POST['date_view']); }?>">
+					<input type="submit" name="search_received" id="search_received" value="Search" class="btn btn-primary">
 				</div>
 				<div class="col-md-3 col-md-offset-3">
 					<div class="pull-right">
@@ -538,6 +542,7 @@ th, footer {
 					</div>
 				</div>
 			</div>
+			</form>
 			<div class="row" style="margin: 0px;">
 				<div class="col-md-12">
 					<div class="filterable">
@@ -562,9 +567,9 @@ th, footer {
 ?>
 					<table class="table table-striped">
 						<thead>
-							<tr>
+							<!-- <tr>
 								<th colspan="11"><h3>Pending Orders</h3></th>
-							</tr>
+							</tr> -->
 							<tr class="filterable">
 								<th colspan="1">Plant: <?php echo ucfirst($search_plant); ?></th>
 								<th colspan="9">
@@ -729,9 +734,9 @@ th, footer {
 ?>
 						<table class="table table-striped">
 						<thead>
-							<tr>
+							<!-- <tr>
 								<th colspan="11"><h3>Pending Orders</h3></th>
-							</tr>
+							</tr> -->
 							<tr class="filterable">
 								<th colspan="1">Plant: <?php echo ucfirst($search_plant); ?></th>
 								<th colspan="9">
