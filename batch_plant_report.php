@@ -209,6 +209,7 @@ th, footer {
 								<li><a href="batch_form_production.php">Add Actual Production</a></li>
 								<li class="divider"></li> -->
 								<li class="dropdown-header">View Reports</li>
+								<li><a href="batch_plant_report.php">Daily Production</a></li>
 								<li><a href="batch_plant_report_view.php?option=total_cement_day">Total cement used per day</a></li>
 								<li><a href="batch_plant_report_view.php?option=total_batch">Total batch and cement used</a></li>
 								<li><a href="batch_plant_report_view.php?option=output_batch">Output per batch</a></li>
@@ -240,7 +241,7 @@ th, footer {
 			$rows[] = $row;
 		}
 ?>	
-				<form method="post" action="batch_plant_report.php">
+				<form method="post" action="batch_plant_report.php" onsubmit="return confirm('Do you really want to submit the form?');">
 				<table class="table table-bordered table-striped" style="text-align: center;">
 						<thead>
 							<tr>
@@ -298,7 +299,7 @@ th, footer {
 	}else{
 ?>
 									<!-- <input type="text" name="type1" id="type1" required> -->
-									<select name="type1" id="type1" required>
+									<select name="type1" id="type1">
 										<option value="">Select</option>
 <?php
 		foreach($rows as $row) {
@@ -319,7 +320,7 @@ th, footer {
 							echo getBatchType($db,$office,'M-3a',$date); 
 	}else{
 ?>
-									<select name="type2" id="type2" required>
+									<select name="type2" id="type2">
 										<option value="">Select</option>
 <?php
 		foreach($rows as $row) {
@@ -340,7 +341,7 @@ th, footer {
 							echo getBatchType($db,$office,'M-3b',$date); 
 	}else{
 ?>
-									<select name="type3" id="type3" required>
+									<select name="type3" id="type3">
 										<option value="">Select</option>
 <?php
 		foreach($rows as $row) {
@@ -1755,7 +1756,7 @@ th, footer {
 			$rows[] = $row;
 		}
 ?>
-						<form method="post" action="batch_plant_report.php">
+						<form method="post" action="batch_plant_report.php" onsubmit="return confirm('Do you really want to submit the form?');">
 						<table class="table table-bordered table-striped" style="text-align: center;">
 						<thead>
 							<tr>
@@ -1813,7 +1814,7 @@ th, footer {
 	}else{
 ?>
 									<!-- <input type="text" name="type1" id="type1" class="form-control" required> -->
-									<select name="type1" id="type1" required>
+									<select name="type1" id="type1">
 										<option value="">Select</option>
 <?php
 		foreach($rows as $row) {
@@ -1834,7 +1835,7 @@ th, footer {
 							echo getBatchType($db,$office,'M-3a',$date); 
 	}else{
 ?>
-									<select name="type2" id="type2" required>
+									<select name="type2" id="type2">
 										<option value="">Select</option>
 <?php
 		foreach($rows as $row) {
@@ -1855,7 +1856,7 @@ th, footer {
 							echo getBatchType($db,$office,'M-3b',$date); 
 	}else{
 ?>
-									<select name="type3" id="type3" required>
+									<select name="type3" id="type3">
 										<option value="">Select</option>
 <?php
 		foreach($rows as $row) {

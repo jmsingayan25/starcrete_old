@@ -23,8 +23,20 @@
 	$result = $user_query->get_result();
 	$user = $result->fetch_assoc();
 
-	// $office = $user['office'];
+	$user_office = $user['office'];
 	$position = $user['position'];
+
+	if($option == 'total_cement_day'){
+		$header = ucfirst($office)." Cement per Day Report";
+	}else if($option == 'total_batch'){
+		$header = ucfirst($office)." Total Batch and Cement Report";
+	}else if($option == 'output_batch'){
+		$header = ucfirst($office)." Output Batch Report";
+	}else if($option == 'monthly_output'){
+		$header = ucfirst($office)." Monthly Output Report";
+	}else if($option == 'monthly_delivery'){
+		$header = ucfirst($office)." Monthly Delivery Report";
+	}
 ?>
 <html>
 <head>
@@ -122,9 +134,84 @@ th, td{
     padding: 15px;
     border: 1px solid #bababa;
 }
+
+/* reset our lists to remove bullet points and padding */
+.mainmenu, .submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* when hovering over a .mainmenu item,
+  display the submenu inside it.
+  we're changing the submenu's max-height from 0 to 200px;
+*/
+.mainmenu li:hover .submenu {
+  display: block;
+  max-height: 200px;
+}
+
+/*
+  we now overwrite the background-color for .submenu links only.
+  CSS reads down the page, so code at the bottom will overwrite the code at the top.
+*/
+.submenu a {
+  background-color: #1f97f9;
+}
+
+/* this is the initial state of all submenus.
+  we set it to max-height: 0, and hide the overflowed content.
+*/
+.submenu {
+  overflow: hidden;
+  max-height: 0;
+  -webkit-transition: all 0.5s ease-out;
+}
 </style>
 </head>
 <body>
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a href="index.php">Home</a>
+		<hr>
+		<!-- <a href="stock.php">Stock Report</a> -->
+<?php
+	if($user_office == 'head'){
+?>		
+		<form action="batch_head_report.php" method="post">
+		<ul class="mainmenu">
+			<li><a href="#">Batch Report</a>
+				<ul class="submenu">
+					<li>
+						<a href="batch_head_report.php?hidden_office=bravo" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Bravo</a>
+					</li>
+					<li>
+						<a href="batch_head_report.php?hidden_office=delta" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Delta</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		</form>
+<?php
+	}else{
+?>
+		<a href="batch_plant_report.php">Batch Report</a>
+<?php
+	}
+?>
+		<!-- <a href="diesel.php">Diesel Report</a> -->
+<?php
+	if($position != 'warehouseman')
+		echo "<a href='purchase_order.php'>Issued Purchase Order</a>"
+?>
+<!-- 		<a href='purchase_order.php'>Issued Purchase Order</a> -->
+		<a href="delivery.php">Issued Delivery Receipt</a>
+		<!-- <a href='purchase_order_aggregates.php'>Issued Purchase Order Aggregates</a> -->
+		<!-- <a href="received.php">Received Order</a> -->
+		<!-- <a href="transmittal.php">Transmittal</a> -->
+		<hr>
+		<a href="#">About Us</a>
+	</div>
 	<nav class="navbar navbar-default" id="primary-nav" style="background-color: white;">
 		<div class="container">
 			<div class="navbar-header">
@@ -142,8 +229,8 @@ th, td{
 	</nav>
 	<nav class="navbar navbar-default" id="secondary-nav" style="background-color: #0884e4; margin-bottom: 10px; vertical-align: middle;">
 		<div class="container-fluid">
-			<!-- <span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span> -->
-			<!-- <span style="font-size:25px; color: white;"><?php echo ucfirst($office); ?> Report </span> -->
+			<span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span>
+			<span style="font-size:25px; color: white;"><?php echo $header; ?></span>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white; background-color: #0884e4;">Welcome! <strong><?php echo ucfirst($user['firstname']); ?></strong><span class="caret"></span></a>
@@ -158,13 +245,33 @@ th, td{
 		<div id="header">
 			<input type="hidden" name="office" id="office" value="<?php echo $office; ?>">
 			<input type="hidden" name="position" id="position" value="<?php echo $position; ?>">
-			<div class="row" style="margin: 0px;">
+			<!-- <div class="row" style="margin: 0px;">
 				<div class="col-md-2">
 					<button type="button" onclick="location.href='batch_head_report.php';" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Back to List of <?php echo ucfirst($office); ?> Report</button>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div id="content">
+			<div class="row" style="margin-bottom: 5px;">
+				<div class="col-md-1 col-md-offset-9">
+					<div class="pull-right">
+						<div class="dropdown">
+							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">View Reports
+							<span class="caret"></span></button>
+							<ul class="dropdown-menu">
+								<li class="dropdown-header">View Reports</li>
+								<li><a href="batch_head_report.php">Daily Production</a></li>
+								<li><a href="batch_head_report_view.php?option=total_cement_day&office=<?php echo $office; ?>">Total cement used per day</a></li>
+								<li><a href="batch_head_report_view.php?option=total_batch&office=<?php echo $office; ?>">Total batch and cement used</a></li>
+								<li><a href="batch_head_report_view.php?option=output_batch&office=<?php echo $office; ?>">Output per batch</a></li>
+								<li><a href="batch_head_report_view.php?option=monthly_output&office=<?php echo $office; ?>">Monthly production output</a></li>
+								<li><a href="batch_head_report_view.php?option=monthly_delivery&office=<?php echo $office; ?>">Monthly delivered CHB</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				
+			</div>
 <?php
 		if($option == 'total_cement_day'){
 ?>

@@ -15,6 +15,18 @@
 
 	$option = $_SESSION['option'];
 
+	if($option == 'total_cement_day'){
+		$header = "Cement per Day Report";
+	}else if($option == 'total_batch'){
+		$header = "Total Batch and Cement Report";
+	}else if($option == 'output_batch'){
+		$header = "Output Batch Report";
+	}else if($option == 'monthly_output'){
+		$header = "Monthly Output Report";
+	}else if($option == 'monthly_delivery'){
+		$header = "Monthly Delivery Report";
+	}
+
 	$user_query = $db->prepare("SELECT * FROM users WHERE username = ?");
 	$user_query->bind_param('s', $_SESSION['login_user']);
 	$user_query->execute();
@@ -187,9 +199,83 @@ th, td{
      color: white;
 }
 
+/* reset our lists to remove bullet points and padding */
+.mainmenu, .submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* when hovering over a .mainmenu item,
+  display the submenu inside it.
+  we're changing the submenu's max-height from 0 to 200px;
+*/
+.mainmenu li:hover .submenu {
+  display: block;
+  max-height: 200px;
+}
+
+/*
+  we now overwrite the background-color for .submenu links only.
+  CSS reads down the page, so code at the bottom will overwrite the code at the top.
+*/
+.submenu a {
+  background-color: #1f97f9;
+}
+
+/* this is the initial state of all submenus.
+  we set it to max-height: 0, and hide the overflowed content.
+*/
+.submenu {
+  overflow: hidden;
+  max-height: 0;
+  -webkit-transition: all 0.5s ease-out;
+}
 </style>
 </head>
 <body>
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a href="index.php">Home</a>
+		<hr>
+		<!-- <a href="stock.php">Stock Report</a> -->
+<?php
+	if($office == 'head'){
+?>		
+		<form action="batch_head_report.php" method="post">
+		<ul class="mainmenu">
+			<li><a href="#">Batch Report</a>
+				<ul class="submenu">
+					<li>
+						<a href="batch_head_report.php?hidden_office=bravo" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Bravo</a>
+					</li>
+					<li>
+						<a href="batch_head_report.php?hidden_office=delta" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Delta</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		</form>
+<?php
+	}else{
+?>
+		<a href="batch_plant_report.php">Batch Report</a>
+<?php
+	}
+?>
+		<!-- <a href="diesel.php">Diesel Report</a> -->
+<?php
+	if($position != 'warehouseman')
+		echo "<a href='purchase_order.php'>Issued Purchase Order</a>"
+?>
+<!-- 		<a href='purchase_order.php'>Issued Purchase Order</a> -->
+		<a href="delivery.php">Issued Delivery Receipt</a>
+		<!-- <a href='purchase_order_aggregates.php'>Issued Purchase Order Aggregates</a> -->
+		<!-- <a href="received.php">Received Order</a> -->
+		<!-- <a href="transmittal.php">Transmittal</a> -->
+		<hr>
+		<a href="#">About Us</a>
+	</div>
 	<nav class="navbar navbar-default" id="primary-nav" style="background-color: white;">
 		<div class="container">
 			<div class="navbar-header">
@@ -207,8 +293,8 @@ th, td{
 	</nav>
 	<nav class="navbar navbar-default" id="secondary-nav" style="background-color: #0884e4; margin-bottom: 10px; vertical-align: middle;">
 		<div class="container-fluid">
-			<!-- <span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span> -->
-			<!-- <span style="font-size:25px; color: white;"><?php echo ucfirst($office); ?> Report </span> -->
+			<span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span>
+			<span style="font-size:25px; color: white;"><?php echo $header; ?></span>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white; background-color: #0884e4;">Welcome! <strong><?php echo ucfirst($user['firstname']); ?></strong><span class="caret"></span></a>
@@ -223,13 +309,32 @@ th, td{
 		<div id="header">
 			<input type="hidden" name="office" id="office" value="<?php echo $office; ?>">
 			<input type="hidden" name="position" id="position" value="<?php echo $position; ?>">
-			<div class="row" style="margin: 0px;">
+<!-- 			<div class="row" style="margin: 0px;">
 				<div class="col-md-2">
 					<button type="button" onclick="location.href='batch_plant_report.php';" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Back to List of <?php echo ucfirst($office); ?> Report</button>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div id="content">
+			<div class="row" style="margin-bottom: 5px;">
+				<div class="col-md-1 col-md-offset-9">
+					<div class="pull-right">
+						<div class="dropdown">
+							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">View Reports
+							<span class="caret"></span></button>
+							<ul class="dropdown-menu">
+								<li class="dropdown-header">View Reports</li>
+								<li><a href="batch_plant_report.php">Daily Production</a></li>
+								<li><a href="batch_plant_report_view.php?option=total_cement_day">Total cement used per day</a></li>
+								<li><a href="batch_plant_report_view.php?option=total_batch">Total batch and cement used</a></li>
+								<li><a href="batch_plant_report_view.php?option=output_batch">Output per batch</a></li>
+								<li><a href="batch_plant_report_view.php?option=monthly_output">Monthly production output</a></li>
+								<li><a href="batch_plant_report_view.php?option=monthly_delivery">Monthly delivered CHB</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
 <?php
 		if($option == 'total_cement_day'){
 ?>
@@ -407,7 +512,8 @@ th, td{
 <?php
 	}else if($option == 'output_batch'){
 ?>
-		<div class="col-md-8 col-md-offset-2">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
 			<table class='table table-striped' style='width: 100%;' id='myTable2'>
 				<thead>
 					<tr>
@@ -484,11 +590,14 @@ th, td{
     };  
     echo $pagLink . "</ul></nav>";  
 ?> -->
+			</div>
 		</div>
+		
 <?php
 	}else if($option == 'monthly_output'){
 ?>
-		<div class='col-md-4 col-md-offset-2'>
+		<div class="row">
+			<div class='col-md-4 col-md-offset-2'>
 			<table class='table table-striped' style='width: 100%;' id='myTable3'>
 				<thead>
 					<tr>
@@ -560,17 +669,17 @@ th, td{
     } 
     echo $pagLink . "</ul></nav>";  
 ?> -->
-		</div>
-		<div class='col-md-4'>
-			<table class='table table-striped' style='width: 100%;' id='myTable4'>
-				<thead>
-					<tr>
-						<th colspan='2'>Monthly Production for All Type</th>
-					</tr>
-					<tr>
-						<th colspan='1'>
-							<input type="text" id='select_date4' name='select_date4' class='form-control' onkeyup='myFunction4();' placeholder="Search for date">
-								<!-- <option value=''>Select Date</option>
+			</div>
+			<div class='col-md-4'>
+				<table class='table table-striped' style='width: 100%;' id='myTable4'>
+					<thead>
+						<tr>
+							<th colspan='2'>Monthly Production for All Type</th>
+						</tr>
+						<tr>
+							<th colspan='1'>
+								<input type="text" id='select_date4' name='select_date4' class='form-control' onkeyup='myFunction4();' placeholder="Search for date">
+									<!-- <option value=''>Select Date</option>
 <?php
 	$query = "SELECT DISTINCT DATE_FORMAT(date_production,'%m/%Y') as prod_date
 				FROM batch_prod
@@ -585,14 +694,14 @@ th, td{
 ?>
 							</select> -->
 							<th colspan="1"></th>
-						</th>
-					</tr>
-					<tr>
-						<th class='col-md-1'>Date</th>
-						<th class='col-md-1'>Total</th>
-					</tr>
-				</thead>
-				<tbody>
+							</th>
+						</tr>
+						<tr>
+							<th class='col-md-1'>Date</th>
+							<th class='col-md-1'>Total</th>
+						</tr>
+					</thead>
+					<tbody>
 <?php
 	$limit = 10;  
 	if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
@@ -606,17 +715,17 @@ th, td{
 	$result = mysqli_query($db, $query);
 	while($row = mysqli_fetch_assoc($result)){		
 ?>
-					<tr>
-						<td class='col-md-1' text-align: center'>
-							<strong><?php echo $row['prod_date']; ?></strong>
-						</td>
-						<td class='col-md-1'><strong><?php echo $row['total']; ?></strong></td>
-					</tr>
+						<tr>
+							<td class='col-md-1' text-align: center'>
+								<strong><?php echo $row['prod_date']; ?></strong>
+							</td>
+							<td class='col-md-1'><strong><?php echo $row['total']; ?></strong></td>
+						</tr>
 <?php
 	}
 ?>
-				</tbody>
-			</table>
+					</tbody>
+				</table>
 <!-- <?php
 	$sql = "SELECT count(*) FROM (SELECT DATE_FORMAT(date_production,'%m/%Y') as prod_date, item_no, SUM(actual_prod) as total
 				FROM batch_prod
@@ -634,11 +743,13 @@ th, td{
     }
     echo $pagLink . "</ul></nav>";  
 ?> -->
+			</div>
 		</div>
 <?php
 	}else if($option == 'monthly_delivery'){
 ?>
-		<div class='col-md-4 col-md-offset-2'>
+		<div class="row">
+			<div class='col-md-4 col-md-offset-2'>
 			<table class='table table-striped' style='width: 100%;' id='myTable5'>
 				<thead>
 					<tr>
@@ -761,15 +872,15 @@ th, td{
 
 	while($row = mysqli_fetch_assoc($result)){	
 ?>	
-					<tr>
-						<td class='col-md-1' style='text-align: center'><strong><?php echo $row['delivery_date']; ?></strong></td>
-						<td class='col-md-1'><strong><?php echo $row['total']; ?></strong></td>
-					</tr>
+						<tr>
+							<td class='col-md-1' style='text-align: center'><strong><?php echo $row['delivery_date']; ?></strong></td>
+							<td class='col-md-1'><strong><?php echo $row['total']; ?></strong></td>
+						</tr>
 <?php
 	}
 ?>
-				</tbody>
-			</table>
+					</tbody>
+				</table>
 <!-- <?php
 	$sql = "SELECT count(*) FROM (SELECT item_no, SUM(delivered) as total, DATE_FORMAT(date_production,'%m/%Y') as delivery_date 
 				FROM batch_prod_stock 
@@ -787,8 +898,8 @@ th, td{
     }
     echo $pagLink . "</ul></nav>";  
 ?> -->
+			</div>
 		</div>
-
 <?php
 	}
 ?>

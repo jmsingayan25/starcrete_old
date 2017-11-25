@@ -12,6 +12,8 @@
 
 	if(isset($_GET['hidden_office'])){
 		$_SESSION['post'] = $_GET['hidden_office'];
+	}else{
+		$_SESSION['post'] = "bravo";
 	}
 
 	$hidden_office = $_SESSION['post'];
@@ -162,6 +164,18 @@ th, footer {
   border-radius: 0;
 }
 
+#box{
+	position: absolute;
+	min-height: 300px;
+	z-index: 15;
+	top: 50%;
+	left: 50%;
+	margin: -25px 0 0 -300px;
+	width: 600px;
+    padding: 15px;
+    border: 1px solid #bababa;
+}
+
 /* reset our lists to remove bullet points and padding */
 .mainmenu, .submenu {
   list-style: none;
@@ -195,6 +209,7 @@ th, footer {
   -webkit-transition: all 0.5s ease-out;
 }
 </style>
+</head>
 <body onload="sortBatch('');onLoadSubmit();">
 	<div id="mySidenav" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -221,7 +236,7 @@ th, footer {
 <?php
 	}else{
 ?>
-		<a href="batch_plant.php">Batch Report</a>
+		<a href="batch_plant_report.php">Batch Report</a>
 <?php
 	}
 ?>
@@ -307,6 +322,7 @@ th, footer {
 						<span class="caret"></span></button>
 						<ul class="dropdown-menu">
 							<li class="dropdown-header">View Reports</li>
+							<li><a href="batch_head_report.php">Daily Production</a></li>
 							<li><a href="batch_head_report_view.php?option=total_cement_day&office=<?php echo $hidden_office; ?>">Total cement used per day</a></li>
 							<li><a href="batch_head_report_view.php?option=total_batch&office=<?php echo $hidden_office; ?>">Total batch and cement used</a></li>
 							<li><a href="batch_head_report_view.php?option=output_batch&office=<?php echo $hidden_office; ?>">Output per batch</a></li>
@@ -937,4 +953,4 @@ th, footer {
 		</div>
 	</div>
 </body>
-</head>
+</html>
