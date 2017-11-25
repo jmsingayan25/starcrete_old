@@ -33,9 +33,9 @@
 <head>
 <?php
 	if($office == 'delta'){
-		echo "<title>Update Form - Purchase Order - Quality Star Concrete Products, Inc.</title>";
+		echo "<title>Update Order - Purchase Order - Quality Star Concrete Products, Inc.</title>";
 	}else{
-		echo "<title>Update Form - Purchase Order - Starcrete Manufacturing Corporation</title>";
+		echo "<title>Update Order - Purchase Order - Starcrete Manufacturing Corporation</title>";
 	}
 ?>
 	<meta charset="utf-8">
@@ -57,12 +57,12 @@ html, body {
 }
 
 #wrapper {
-	min-height:83%;
+	min-height:79%;
 	position:relative;
 }
 
 #content {
-	margin: 0 auto;
+	margin: 37px auto auto auto;
 	width: 40%;
 	padding-bottom:20px; /* Height of the footer element */
 	border: 1px solid #bababa;
@@ -115,6 +115,48 @@ th, footer {
 </style>
 </head>
 <body>
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a href="index.php">Home</a>
+		<hr>
+<!-- 		<a href="stock.php">Stock Report</a>
+<?php
+	if($office == 'head'){
+?>		
+		<form action="batch_head_report.php" method="post">
+		<ul class="mainmenu">
+			<li><a href="#">Batch Report</a>
+				<ul class="submenu">
+					<li>
+						<a href="batch_head_report.php?hidden_office=bravo" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Bravo</a>
+					</li>
+					<li>
+						<a href="batch_head_report.php?hidden_office=delta" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Delta</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		</form>
+<?php
+	}else{
+?>
+		<a href="batch.php">Batch Report</a>
+<?php
+	}
+?>
+		<a href="diesel.php">Diesel Report</a> -->
+<?php
+	if($position != 'warehouseman')
+		echo "<a href='purchase_order.php'>Issued Purchase Order</a>"
+?>
+<!-- 		<a href='purchase_order.php'>Issued Purchase Order</a> -->
+		<a href="delivery.php">Issued Delivery Receipt</a>
+		<!-- <a href='purchase_order_aggregates.php'>Issued Purchase Order Aggregates</a> -->
+		<!-- <a href="received.php">Received Order</a> -->
+		<!-- <a href="transmittal.php">Transmittal</a> -->
+		<hr>
+		<a href="#">About Us</a>
+	</div>
 	<nav class="navbar navbar-default" id="primary-nav" style="background-color: white;">
 	<div class="container">
 		<div class="navbar-header">
@@ -152,33 +194,27 @@ th, footer {
 				<div class="col-md-12" style="text-align: center; background-color: #0884e4; color: white; padding: 10px; margin: -15px 0 15px 0;"><h3><strong>Update Form</strong></h3>
 				</div>
 			</div>
-			<div class="row" style="margin-bottom: 5px;">
+			<div class="row" style="margin-left: 10px; margin-bottom: 5px;">
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="po_no">P.O. No.</label>
-						<input type="text" id="po_no" name="po_no" value="<?php echo $purchase_row['purchase_order_no']; ?>" class="form-control" autocomplete="off" required>
+						<input type="text" id="update_po_no" name="update_po_no" value="<?php echo $purchase_row['purchase_order_no']; ?>" class="form-control" autocomplete="off" required>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for="item">Current Item</label>
+						<input type="text" id="item_no" name="item_no" value="<?php echo $purchase_row['item_no']; ?>" class="form-control" autocomplete="off" readonly>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-					<div class="col-md-12" style="text-align: center; background-color: #0884e4; color: white; padding: 5px;"><strong>Items</strong>
-					</div>
-				</div>
-				<div class="row" style="text-align: center; background-color: white; padding: 5px;">
-					<div class="col-md-6">
-						<label for="item">Item</label>
-					</div>
-					<div class="col-md-6">
-						<label for="quantity">Quantity</label>
-					</div>
-				</div>
-				<div class="row">
-					<table id="item_table" align="center">
-						<tr id="row1" style="text-align: center;">
-							<td class="col-md-6">
-								<div class="form-group">
-									<input list="item_nos" name="item_no" class="form-control" value="<?php echo $purchase_row['item_no']; ?>">
-										<datalist id="item_nos">
+			<div class="row" style="margin-left: 10px; margin-bottom: 5px;">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for="item">New Item</label>
+						<br>
+						<input list="item_nos" name="update_item_no" class="form-control">
+						<datalist id="item_nos">
 <?php
 	$sql = "SELECT item_no FROM batch_list ORDER BY item_no ASC";
 	$result = mysqli_query($db, $sql);
@@ -186,24 +222,60 @@ th, footer {
 									echo "<option value='" . $row['item_no'] . "'>" . $row['item_no'] . "</option>";
 	}
 ?>
-										</datalist>
-								</div>
-							</td>
-							<td class="col-md-6">
-								<div class="form-group">
-									<input type="text" id="quantity" name="quantity" class="form-control" autocomplete="off" value="<?php echo $purchase_row['quantity']; ?>" required>
-								</div>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-md-12">
-						<input type="submit" name="submit" value="Submit" class="btn btn-primary btn-block">
-						<a href="purchase_order.php" class="btn btn-warning btn-block">Cancel</a>
+						</datalist>
 					</div>
 				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for="quantity">Quantity</label>
+						<input type="text" id="update_quantity" name="update_quantity" class="form-control" autocomplete="off" value="<?php echo $purchase_row['quantity']; ?>" required>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="row">
+				<div class="col-md-12" style="text-align: center; background-color: #0884e4; color: white; padding: 5px;"><strong>Items</strong>
+				</div>
+			</div> -->
+			<!-- <div class="row" style="text-align: center; background-color: white; padding: 5px;">
+				<div class="col-md-6">
+					<label for="item">Item</label>
+				</div>
+				<div class="col-md-6">
+					<label for="quantity">Quantity</label>
+				</div>
+			</div>
+			<div class="row">
+				<table id="item_table" align="center">
+					<tr id="row1" style="text-align: center;">
+						<td class="col-md-6">
+							<div class="form-group">
+								<input list="item_nos" name="item_no" class="form-control" value="<?php echo $purchase_row['item_no']; ?>">
+									<datalist id="item_nos">
+<?php
+	$sql = "SELECT item_no FROM batch_list ORDER BY item_no ASC";
+	$result = mysqli_query($db, $sql);
+	foreach($result as $row){
+									echo "<option value='" . $row['item_no'] . "'>" . $row['item_no'] . "</option>";
+	}
+?>
+									</datalist>
+							</div>
+						</td>
+						<td class="col-md-6">
+							<div class="form-group">
+								<input type="text" id="quantity" name="quantity" class="form-control" autocomplete="off" value="<?php echo $purchase_row['quantity']; ?>" required>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div> -->
+			<hr>
+			<div class="row">
+				<div class="col-md-12">
+					<input type="submit" name="submit" value="Submit" class="btn btn-primary btn-block">
+					<a href="purchase_order.php" class="btn btn-warning btn-block">Cancel</a>
+				</div>
+			</div>
 			</form>
 		</div>
 		<div id="footer">
@@ -222,22 +294,55 @@ th, footer {
 
 	if(isset($_POST['submit'])){
 
-		$purchase_order_no = $_POST['po_no'];
-		$item_no = $_POST['item_no'];
-		$quantity = $_POST['quantity'];
+		$update_purchase_order_no = mysqli_real_escape_string($db, $_POST['update_po_no']);
+		$update_quantity = mysqli_real_escape_string($db, $_POST['update_quantity']);
 
-		$reply = array('post' => $_POST);
-		echo json_encode($reply);
+		if(isset($_POST['update_item_no']) && $_POST['update_item_no'] != ''){
+			$update_item_no = mysqli_real_escape_string($db, $_POST['update_item_no']);
+		}else{
+			$update_item_no = mysqli_real_escape_string($db, $_POST['item_no']);
+		}
+
+		$datetime = date("Y/m/d H:i:s");
+		$plant = ucfirst($purchase_row['office']);
+
+		// $reply = array('post' => $_POST);
+		// echo json_encode($reply);
 
 		$sql_update = "UPDATE purchase_order SET purchase_order_no = '$purchase_order_no', item_no = '$item_no', quantity = '$quantity' WHERE purchase_id = '$purchase_id'";
 
-			// echo "<script> alert('Purchase Order No. succesfully updated')</script>";
+		if($update_purchase_order_no != $purchase_row['purchase_order_no'] && $update_item_no == $purchase_row['item_no'] && $update_quantity == $purchase_row['quantity']){
+			// update po no only
+			$history = "INSERT INTO history(table_report, transaction_type, detail, history_date, office) 
+		 					VALUES('Purchase Order','Update P.O. Detail','$plant update P.O. No. ".$purchase_row['purchase_order_no']." details','$datetime','".$purchase_row['office']."')";
+		}else if($update_purchase_order_no == $purchase_row['purchase_order_no'] && $update_item_no != $purchase_row['item_no'] && $update_quantity == $purchase_row['quantity'])
+			// update item only
+		}else if($update_purchase_order_no == $purchase_row['purchase_order_no'] && $update_item_no == $purchase_row['item_no'] && $update_quantity != $purchase_row['quantity']){
+			// update quantity only
+		}else if($update_purchase_order_no != $purchase_row['purchase_order_no'] && $update_item_no != $purchase_row['item_no'] && $update_quantity == $purchase_row['quantity']){
+			// update po no and item only
+		}else if($update_purchase_order_no != $purchase_row['purchase_order_no'] && $update_item_no == $purchase_row['item_no'] && $update_quantity != $purchase_row['quantity']){
+			// update po no and quantity only
+		}else if($update_purchase_order_no == $purchase_row['purchase_order_no'] && $update_item_no != $purchase_row['item_no'] && $update_quantity != $purchase_row['quantity']){
+			// update item and quantity only
+		}else if($update_purchase_order_no != $purchase_row['purchase_order_no'] && $update_item_no != $purchase_row['item_no'] && $update_quantity != $purchase_row['quantity']){
+			// update all fields
+		}
 
-		// if(mysqli_query($sql_update)){
-		// 	echo "<script> alert('Purchase Order No. succesfully updated')</script>";
+
+
+		// echo "<script> alert('Purchase Order No. succesfully updated')</script>";
+		// if(mysqli_query($db, $sql_update) && mysqli_query($db, $history)){
+		// 	echo "<script> alert('Purchase Order No. succesfully updated'); 
+		// 					window.location.href='purchase_order.php'
+		// 		  </script>";
+		// }else{
+		// 	phpAlert('Something went wrong. Please try again.');
+		// 	echo "<meta http-equiv='refresh' content='0'>";
 		// }
 
-		echo $sql_update;
+		// echo $sql_update."<br>";
+		// echo $history;
 	}
 
 ?>
