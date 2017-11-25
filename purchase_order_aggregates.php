@@ -368,7 +368,7 @@ th, footer {
 				</div>
 			</div>
 			</form>
-			<div class="row" style="margin: 0px;">
+			<div class="row" style="margin: 0px; margin-bottom: 5px">
 				<div class="col-md-12">
 					<div class="filterable">
 <?php

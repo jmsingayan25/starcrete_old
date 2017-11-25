@@ -404,14 +404,14 @@ th, footer {
 								</a>
 								</li> -->
 								<li><a href="purchase_order_cancelled.php">Cancelled Orders</a></li>
-								<li><a href="purchase_order_success.php">Delivered Orders</a></li>
+								<!-- <li><a href="purchase_order_success.php">Delivered Orders</a></li> -->
 							</ul>
 						</div>	
 					</div>
 				</div>
 			</div>
 			</form>
-			<div class="row" style="margin: 0px;">
+			<div class="row" style="margin: 0px; margin-bottom: 5px">
 				<div class="col-md-12">
 					<div class="filterable">
 

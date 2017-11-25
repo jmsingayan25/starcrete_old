@@ -418,7 +418,7 @@ th, footer {
 								</a>
 								</li> -->
 								<li><a href="purchase_order_cancelled.php">Cancelled Orders</a></li>
-								<li><a href="purchase_order_success.php">Delivered Orders</a></li>
+								<!-- <li><a href="purchase_order_success.php">Delivered Orders</a></li> -->
 							</ul>
 						</div>			
 					</div>
