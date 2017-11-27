@@ -37,7 +37,7 @@
 	}
 ?>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<link href="css_ext/sidebar.css" rel="stylesheet">
@@ -261,8 +261,8 @@ th, footer {
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 		<a href="index.php">Home</a>
 		<hr>
-		<!-- <a href="stock.php">Stock Report</a> -->
-<!-- <?php
+		<a href="stock_report.php">Stock Report</a>
+<?php
 	if($office == 'head'){
 ?>		
 		<form action="batch_head_report.php" method="post">
@@ -285,17 +285,17 @@ th, footer {
 		<a href="batch_plant_report.php">Batch Report</a>
 <?php
 	}
-?> -->
-		<!-- <a href="diesel.php">Diesel Report</a> -->
+?>
+		<a href="diesel.php">Diesel Report</a>
 <?php
 	if($position != 'warehouseman')
-		echo "<a href='purchase_order.php'>Issued Purchase Order</a>"
+		echo "<a href='purchase_order.php'>Issued Purchase Order</a>";
 ?>
-<!-- 		<a href='purchase_order.php'>Issued Purchase Order</a> -->
+		<!-- <a href='purchase_order.php'>Issued Purchase Order</a> -->
 		<a href="delivery.php">Issued Delivery Receipt</a>
-		<!-- <a href='purchase_order_aggregates.php'>Issued Purchase Order Aggregates</a> -->
-		<!-- <a href="received.php">Received Order</a> -->
-		<!-- <a href="transmittal.php">Transmittal</a> -->
+		<a href='purchase_order_aggregates.php'>Issued Purchase Order Aggregates</a>
+		<a href="received.php">Received Order</a>
+		<a href="transmittal.php">Transmittal</a>
 		<hr>
 		<a href="#">About Us</a>
 	</div>
