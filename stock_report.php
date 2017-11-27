@@ -16,6 +16,7 @@
 	$user = $result->fetch_assoc();
 
 	$office = $user['office'];
+	$position = $user['position'];
 
 ?>
 <html>
@@ -28,7 +29,7 @@
 	}
 ?>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<link href="css_ext/sidebar.css" rel="stylesheet">
@@ -182,7 +183,7 @@ th, footer {
 		<!-- <a href="diesel.php">Diesel Report</a> -->
 <?php
 	if($position != 'warehouseman')
-		echo "<a href='purchase_order.php'>Issued Purchase Order</a>"
+		echo "<a href='purchase_order.php'>Issued Purchase Order</a>";
 ?>
 <!-- 		<a href='purchase_order.php'>Issued Purchase Order</a> -->
 		<a href="delivery.php">Issued Delivery Receipt</a>

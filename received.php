@@ -29,7 +29,7 @@
 	}
 ?>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<link href="css_ext/sidebar.css" rel="stylesheet">
@@ -377,9 +377,9 @@ th, footer {
 									Date: <?php echo date_format($date_view,"F d, Y"); ?>
 								</th>
 							</tr> -->
-							<tr>
+							<!-- <tr>
 								<th colspan="8"><h3>Received Orders</h3></th>
-							</tr>
+							</tr> -->
 							<tr class="filterable">
 								<th colspan="1" style="text-align: left;">Plant: <?php echo ucfirst($search_plant); ?></th>
 								<th colspan="7">
@@ -474,9 +474,9 @@ th, footer {
 									Date: <?php echo date_format($date_view,"F d, Y"); ?>
 								</th>
 							</tr> -->
-							<tr>
+							<!-- <tr>
 								<th colspan="8"><h3>Received Orders</h3></th>
-							</tr>
+							</tr> -->
 							<tr class="filterable">
 								<th colspan="1" style="text-align: left;">Plant: <?php echo ucfirst($search_plant); ?></th>
 								<th colspan="7">

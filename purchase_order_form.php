@@ -28,7 +28,7 @@
 	}
 ?>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<link href="css_ext/sidebar.css" rel="stylesheet">
@@ -186,7 +186,7 @@ th, footer {
 	</nav>
 	<nav class="navbar navbar-default" id="secondary-nav" style="background-color: #0884e4; margin-bottom: 10px; vertical-align: middle;">
 		<div class="container-fluid">
-			<!-- <span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span> -->
+			<span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span>
 			<span style="font-size:25px; color: white;"><a href="purchase_order.php" style="color: white;">Purchase Order</a> > Purchase Order Form </span>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
@@ -205,11 +205,11 @@ th, footer {
 		<div id="header">
 			<input type="hidden" name="office" id="office" value="<?php echo $office; ?>">
 			<input type="hidden" name="position" id="position" value="<?php echo $position; ?>">
-			<div class="row" style="margin: 0px; margin-bottom: 5px;">
+			<!-- <div class="row" style="margin: 0px; margin-bottom: 5px;">
 				<div class="col-md-12">
 					<button type="button" onclick="location.href='purchase_order.php';" class="btn btn-default" style="float: left;"><span class="glyphicon glyphicon-arrow-left"></span> Back to Purchase Order Page</button>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div id="content">
 			<form action="purchase_order_form.php" method="post" id="form">
@@ -408,7 +408,7 @@ th, footer {
 									VALUES('$purchase_unique_id','$po_no','$client','$item[$i]','$quantity[$i]','$quantity[$i]','$address','$contact_person','$contact_no','$datetime','$plant','Pending')";
 
 				$history_query = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) 
-							VALUES('Purchase Order','Issued P.O. No.','$item[$i]','$client ordered ".number_format($quantity[$i])." pcs of $item[$i] with P.O. No. $po_no to ".ucfirst($plant)."','$datetime','$plant')";
+							VALUES('Purchase Order','Issued P.O. No.','$item[$i]','$client ordered ".number_format($quantity[$i])." pcs of $item[$i] with P.O. No. $po_no','$datetime','$plant')";
 
 				// echo $insert_purchase_order;
 				// echo $history_query;

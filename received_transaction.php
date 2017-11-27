@@ -28,7 +28,7 @@
 	}
 ?>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<link href="css_ext/sidebar.css" rel="stylesheet">
@@ -130,6 +130,48 @@ th, footer {
 </style>
 </head>
 <body onload="officeOption('');">
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a href="index.php">Home</a>
+		<hr>
+<!-- 		<a href="stock_report.php">Stock Report</a>
+<?php
+	if($office == 'head'){
+?>		
+		<form action="batch_head_report.php" method="post">
+		<ul class="mainmenu">
+			<li><a href="#">Batch Report</a>
+				<ul class="submenu">
+					<li>
+						<a href="batch_head_report.php?hidden_office=bravo" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Bravo</a>
+					</li>
+					<li>
+						<a href="batch_head_report.php?hidden_office=delta" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Delta</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		</form>
+<?php
+	}else{
+?>
+		<a href="batch.php">Batch Report</a>
+<?php
+	}
+?>
+		<a href="diesel.php">Diesel Report</a> -->
+<?php
+	if($position != 'warehouseman')
+		echo "<a href='purchase_order.php'>Issued Purchase Order</a>"
+?>
+<!-- 		<a href='purchase_order.php'>Issued Purchase Order</a> -->
+		<a href="delivery.php">Issued Delivery Receipt</a>
+		<!-- <a href='purchase_order_aggregates.php'>Issued Purchase Order Aggregates</a> -->
+		<!-- <a href="received.php">Received Order</a> -->
+		<!-- <a href="transmittal.php">Transmittal</a> -->
+		<hr>
+		<a href="#">About Us</a>
+	</div>
 	<nav class="navbar navbar-default" id="primary-nav" style="background-color: white;">
 		<div class="container">
 			<div class="navbar-header">
@@ -147,8 +189,8 @@ th, footer {
 	</nav>
 	<nav class="navbar navbar-default" id="secondary-nav" style="background-color: #0884e4; margin-bottom: 10px; vertical-align: middle;">
 		<div class="container-fluid">
-			<!-- <span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span> -->
-			<span style="font-size:25px; color: white;">Received Order > Pending Orders</span>
+			<span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span>
+			<span style="font-size:25px; color: white;"><a href="received.php" style="color: white;">Received Order</a> > Pending Orders</span>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white; background-color: #0884e4;">Welcome! <strong><?php echo ucfirst($user['firstname']); ?></strong><span class="caret"></span></a>
@@ -168,7 +210,7 @@ th, footer {
 		</div>
 		<div id="content">
 			<form action="received_transaction.php" method="post" class="form-inline">
-			<div class="row" style="margin: 0px;">
+			<div class="row" style="margin: 0px; margin-bottom: 5px;">
 				<div class="col-md-4">
 <?php
 	if($office == 'head'){
@@ -191,11 +233,11 @@ th, footer {
 					<label for="end_date">End Date:</label><input type="date" name="end_date" class="form-control" value="<?php if(isset($_POST['end_date'])) { echo htmlentities ($_POST['end_date']); }?>">
 					<input type="submit" name="search_received" id="search_received" value="Search" class="btn btn-primary">
 				</div>
-				<div class="col-md-1 col-md-offset-5">
+				<!-- <div class="col-md-1 col-md-offset-5">
 					<div class="pull-right">
 						<button type="button" onclick="location.href='received.php';" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Back to Received Order</button>
 					</div>
-				</div>
+				</div> -->
 				
 			</div>
 			</form>
@@ -233,9 +275,9 @@ th, footer {
 ?>					
 					<table class="table table-striped">
 						<thead>
-							<tr>
+							<!-- <tr>
 								<th colspan="7"><h3>Pending Orders</h3></th>
-							</tr>
+							</tr> -->
 							<tr class="filterable">
 								<th colspan="1" style="text-align: left;">Plant: <?php echo ucfirst($search_plant); ?></th>
 								<th colspan="6">
@@ -369,9 +411,9 @@ th, footer {
 ?>
 					<table class="table table-striped">
 						<thead>
-							<tr>
+							<!-- <tr>
 								<th colspan="7"><h3>Pending Orders</h3></th>
-							</tr>
+							</tr> -->
 							<tr class="filterable">
 								<th colspan="1" style="text-align: left;">Plant: <?php echo ucfirst($search_plant); ?></th>
 								<th colspan="6">

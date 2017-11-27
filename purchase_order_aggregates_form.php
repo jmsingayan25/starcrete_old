@@ -29,7 +29,7 @@
 	}
 ?>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<link href="css_ext/sidebar.css" rel="stylesheet">
@@ -106,7 +106,7 @@ th, footer {
     color: white;
 }
 #content {
-	min-height: 457px;
+	min-height: 458px;
 }
 #nav {
 	position: absolute;
@@ -127,7 +127,7 @@ th, footer {
 	z-index: 15;
 	top: 50%;
 	left: 50%;
-	margin: -25px 0 0 -300px;
+	margin: 0 0 0 -300px;
 	width: 600px;
     padding: 15px;
     border: 1px solid #bababa;
@@ -152,8 +152,8 @@ th, footer {
 	</nav>
 	<nav class="navbar navbar-default" id="secondary-nav" style="background-color: #0884e4; margin-bottom: 10px; vertical-align: middle;">
 		<div class="container-fluid">
-			<!-- <span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span> -->
-			<span style="font-size:25px; color: white;">Purchase Order Aggregates > Order Form </span>
+			<span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span>
+			<span style="font-size:25px; color: white;"><a href="purchase_order_aggregates.php" style="color: white;">Purchase Order Aggregates</a> > Order Form </span>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white; background-color: #0884e4;">Welcome! <strong><?php echo ucfirst($user['firstname']); ?></strong><span class="caret"></span></a>
@@ -168,9 +168,9 @@ th, footer {
 	<input type="hidden" name="office" id="office" value="<?php echo $office; ?>">
 	<input type="hidden" name="position" id="position" value="<?php echo $position; ?>">
 	<div class="row" style="margin: 0px;">
-		<div class="col-md-12">
+		<!-- <div class="col-md-12">
 			<button type="button" onclick="location.href='purchase_order_aggregates.php';" class="btn btn-default" style="float: left;"><span class="glyphicon glyphicon-arrow-left"></span> Back to Purchase Order Aggregates Page</button>
-		</div>
+		</div> -->
 	</div>
 	<div class="row" style="margin: 0px;">
 		<div id="content">
