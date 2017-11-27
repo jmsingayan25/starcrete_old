@@ -274,7 +274,7 @@ th, footer {
 	<nav class="navbar navbar-default" id="secondary-nav" style="background-color: #0884e4; margin-bottom: 10px;">
 		<div class="container-fluid">
 			<span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span>
-			<span style="font-size:25px; cursor:pointer; color: white;">Transmittal</span>
+			<span style="font-size:25px; cursor:pointer; color: white;"><a href="transmittal.php" style="color: white;">Transmittal</a> > Received Items</span>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white; background-color: #0884e4;">Welcome! <strong><?php echo ucfirst($user['firstname']); ?></strong><span class="caret"></span></a>
@@ -328,9 +328,9 @@ th, footer {
 ?>
 					<table class="table table-striped">
 						<thead>
-							<tr>
+							<!-- <tr>
 								<th colspan="12"><h3>Incoming / Received Items</h3></th>
-				     		</tr>
+				     		</tr> -->
 				     		<tr class="filterable">
 								<th colspan="12">
 									<button class="btn btn-default btn-xs btn-filter" style="float: right;"><span class="glyphicon glyphicon-filter"></span> Filter</button>
@@ -414,9 +414,9 @@ th, footer {
 ?>			   
 					<table class="table table-striped">
 						<thead>
-							<tr>
+							<!-- <tr>
 								<th colspan="12"><h3>Incoming / Received Items</h3></th>
-				     		</tr>
+				     		</tr> -->
 				     		<tr class="filterable">
 								<th colspan="6">
 									<button class="btn btn-default btn-xs btn-filter" style="float: right;"><span class="glyphicon glyphicon-filter"></span> Filter</button>

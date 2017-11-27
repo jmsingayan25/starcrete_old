@@ -60,7 +60,7 @@
 
 #content {
 	margin: 0 auto;
-	min-height: 506px;
+	min-height: 550px;
 	padding-bottom:20px; /* Height of the footer element */
 	padding-right: 15px;
 	padding-left: 15px;
@@ -116,6 +116,48 @@ th, footer {
 </style>
 </head>
 <body>
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a href="index.php">Home</a>
+		<hr>
+<!-- 		<a href="stock.php">Stock Report</a>
+<?php
+	if($office == 'head'){
+?>		
+		<form action="batch_head_report.php" method="post">
+		<ul class="mainmenu">
+			<li><a href="#">Batch Report</a>
+				<ul class="submenu">
+					<li>
+						<a href="batch_head_report.php?hidden_office=bravo" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Bravo</a>
+					</li>
+					<li>
+						<a href="batch_head_report.php?hidden_office=delta" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Delta</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		</form>
+<?php
+	}else{
+?>
+		<a href="batch.php">Batch Report</a>
+<?php
+	}
+?>
+		<a href="diesel.php">Diesel Report</a> -->
+<?php
+	if($position != 'warehouseman')
+		echo "<a href='purchase_order.php'>Issued Purchase Order</a>"
+?>
+<!-- 		<a href='purchase_order.php'>Issued Purchase Order</a> -->
+		<a href="delivery.php">Issued Delivery Receipt</a>
+		<!-- <a href='purchase_order_aggregates.php'>Issued Purchase Order Aggregates</a> -->
+		<!-- <a href="received.php">Received Order</a> -->
+		<!-- <a href="transmittal.php">Transmittal</a> -->
+		<hr>
+		<a href="#">About Us</a>
+	</div>
 	<nav class="navbar navbar-default" id="primary-nav" style="background-color: white;">
 		<div class="container">
 			<div class="navbar-header">
@@ -133,8 +175,8 @@ th, footer {
 	</nav>
 	<nav class="navbar navbar-default" id="secondary-nav" style="background-color: #0884e4; margin-bottom: 10px; vertical-align: middle;">
 		<div class="container-fluid">
-			<!-- <span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span> -->
-			<span style="font-size:25px; color: white;">Transmittal > List of Items</span>
+			<span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span>
+			<span style="font-size:25px; color: white;"><a href="transmittal.php" style="color: white;">Received Item</a> > List of Items</span>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white; background-color: #0884e4;">Welcome! <strong><?php echo ucfirst($user['firstname']); ?></strong><span class="caret"></span></a>
@@ -146,13 +188,13 @@ th, footer {
 		</div>
 	</nav>
 
-	<div id="wrapper">
+	<div id="wrapper" onclick="closeNav()">
 		<div id="header">
-			<div class="row" style="margin: 0px;">
+			<!-- <div class="row" style="margin: 0px;">
 				<div class="col-md-12">
 					<button type="button" onclick="location.href='transmittal.php';" class="btn btn-default" style="margin-bottom: 10px; float: left;"><span class="glyphicon glyphicon-arrow-left"></span> Back to Transmittal</button>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div id="content">
 			<div class="row">
@@ -248,7 +290,7 @@ th, footer {
 		$row = mysqli_fetch_assoc($result);
 
 		$history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office)
-					VALUES('Transmittal','Received','".$row['item_no']."','".$row['delivered_by']." from ". $row['from_office']." transferred ".$row['quantity']." of ".$row['item_no']." to ".$row['office']."','$datetime','".$row['office']."')";
+					VALUES('Transmittal','Received Item','".$row['item_no']."','".$row['delivered_by']." from ". $row['from_office']." transferred ".$row['quantity']." of ".$row['item_no']." to ".$row['office']."','$datetime','".$row['office']."')";
 		// echo $history;
 		// echo $sql;
 		if(mysqli_query($db, $sql) && mysqli_query($db, $history)){

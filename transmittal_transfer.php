@@ -239,8 +239,8 @@ th, footer {
 	</nav>
 	<nav class="navbar navbar-default" id="secondary-nav" style="background-color: #0884e4; margin-bottom: 10px;">
 		<div class="container-fluid">
-			<!-- <span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span> -->
-			<span style="font-size:25px; cursor:pointer; color: white;">Transmittal > Transferred Items</span>
+			<span style="font-size:30px; cursor:pointer; color: white;" onclick="openNav();">&#9776;</span>
+			<span style="font-size:25px; cursor:pointer; color: white;"><a href="transmittal.php" style="color: white;">Transmittal</a> > Transferred Items</span>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white; background-color: #0884e4;">Welcome! <strong><?php echo ucfirst($user['firstname']); ?></strong><span class="caret"></span></a>
@@ -252,20 +252,35 @@ th, footer {
 		</div>
 	</nav>
 
-	<div id="wrapper">
+	<div id="wrapper" onclick="closeNav()">
 		<div id="content">
 			<div class="row" style="margin: 0px; margin-bottom: 5px;">
 				<div class="col-md-4">
-					<div class="btn-group" role="group">
+					<!-- <div class="btn-group" role="group">
 						<button type='button' class='btn btn-default' onclick="location.href='transmittal.php';"><span class='glyphicon glyphicon-arrow-left'></span> Back to Transmittal Page</button>
-					</div>
-				</div>
-				<div class="col-md-3 col-md-offset-5">
-					<div class="pull-right">
+					</div> -->
 					<form action="transmittal_transfer.php" method="post" class="form-inline">
 						<input type="date" name="date_view" class="form-control" value="<?php if(isset($_POST['date_view'])) { echo htmlentities ($_POST['date_view']); }?>">
 						<input type="submit" name="search_table" id="search_table" value="Search" class="btn btn-primary">
 					</form>
+				</div>
+				<div class="col-md-3 col-md-offset-5">
+					<div class="pull-right">
+					<!-- <form action="transmittal_transfer.php" method="post" class="form-inline">
+						<input type="date" name="date_view" class="form-control" value="<?php if(isset($_POST['date_view'])) { echo htmlentities ($_POST['date_view']); }?>">
+						<input type="submit" name="search_table" id="search_table" value="Search" class="btn btn-primary">
+					</form> -->
+						<div class="dropdown">
+							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Transaction / View Reports
+							<span class="caret"></span></button>
+							<ul class="dropdown-menu">
+								<li class="dropdown-header">Transaction</li>
+								<li><a href="transmittal_form.php">Add Transaction</a></li>
+								<li class="divider"></li>
+								<li class="dropdown-header">View Reports</li>
+								<li><a href="transmittal.php">Received Items</a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -283,9 +298,9 @@ th, footer {
 ?>
 					<table class="table table-striped">
 						<thead>
-							<tr>
+							<!-- <tr>
 								<th colspan="12"><h3>Transferred Items</h3></th>
-				     		</tr>
+				     		</tr> -->
 							<tr class="filterable">
 								<th colspan="6">
 									<button class="btn btn-default btn-xs btn-filter" style="float: right;"><span class="glyphicon glyphicon-filter"></span> Filter</button>
@@ -372,9 +387,9 @@ th, footer {
 ?>			   
 					<table class="table table-striped">
 						<thead>
-							<tr>
+							<!-- <tr>
 								<th colspan="12"><h3>Transferred Items</h3></th>
-				     		</tr>
+				     		</tr> -->
 				     		<tr class="filterable">
 								<th colspan="6">
 									<button class="btn btn-default btn-xs btn-filter" style="float: right;"><span class="glyphicon glyphicon-filter"></span> Filter</button>
