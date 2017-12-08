@@ -15,7 +15,7 @@
 
 	$office = $user['office'];
 	$position = $user['position'];
-
+	$radio_value = "";
 
 ?>
 <html>
@@ -102,6 +102,11 @@
     		a.style.display = 'none';
 	}
 
+	function selectOffice(number){
+
+		<?php $radio_value ?> = number;
+	}
+
 </script>
 <style>
 html, body {
@@ -169,6 +174,48 @@ th, footer {
 </style>
 </head>
 <body onSubmit="return confirm('Submit all data?')">
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a href="index.php">Home</a>
+		<hr>
+<!-- 		<a href="stock.php">Stock Report</a>
+<?php
+	if($office == 'head'){
+?>		
+		<form action="batch_head_report.php" method="post">
+		<ul class="mainmenu">
+			<li><a href="#">Batch Report</a>
+				<ul class="submenu">
+					<li>
+						<a href="batch_head_report.php?hidden_office=bravo" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Bravo</a>
+					</li>
+					<li>
+						<a href="batch_head_report.php?hidden_office=delta" type="submit" name="action"><span class='glyphicon glyphicon-menu-right'></span> Delta</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		</form>
+<?php
+	}else{
+?>
+		<a href="batch.php">Batch Report</a>
+<?php
+	}
+?>
+		<a href="diesel.php">Diesel Report</a> -->
+<?php
+	if($position != 'warehouseman')
+		echo "<a href='purchase_order.php'>Issued Purchase Order</a>"
+?>
+<!-- 		<a href='purchase_order.php'>Issued Purchase Order</a> -->
+		<a href="delivery.php">Issued Delivery Receipt</a>
+		<!-- <a href='purchase_order_aggregates.php'>Issued Purchase Order Aggregates</a> -->
+		<!-- <a href="received.php">Received Order</a> -->
+		<!-- <a href="transmittal.php">Transmittal</a> -->
+		<hr>
+		<a href="#">About Us</a>
+	</div>
 	<nav class="navbar navbar-default" id="primary-nav" style="background-color: white;">
 		<div class="container">
 			<div class="navbar-header">
@@ -205,6 +252,7 @@ th, footer {
 		<div id="header">
 			<input type="hidden" name="office" id="office" value="<?php echo $office; ?>">
 			<input type="hidden" name="position" id="position" value="<?php echo $position; ?>">
+			<input type="hidden" name="hidden_radio" id="hidden_radio">
 			<!-- <div class="row" style="margin: 0px; margin-bottom: 5px;">
 				<div class="col-md-12">
 					<button type="button" onclick="location.href='purchase_order.php';" class="btn btn-default" style="float: left;"><span class="glyphicon glyphicon-arrow-left"></span> Back to Purchase Order Page</button>
@@ -280,8 +328,8 @@ th, footer {
 								<option value="Bravo">Bravo</option>
 								<option value="Delta">Delta</option>
 							</select> -->
-							<input type="radio" name="plant" value="bravo" checked> Bravo<br>
-							<input type="radio" name="plant" value="delta"> Delta
+							<input type="radio" name="plant" value="bravo" onclick="selectOffice(this.value);" checked> Bravo<br>
+							<input type="radio" name="plant" value="delta" onclick="selectOffice(this.value);"> Delta
 						</div>
 					</div>
 					<div class="col-md-6"></div>
@@ -319,10 +367,18 @@ th, footer {
 								<input list="item_nos" name="item_no[]" class="form-control">
 								<datalist id="item_nos">
 <?php
+
+	// if(isset($_POST['hidden_radio'])){
+	// 	$item_office = $_POST['hidden_radio'];
+	// }else{
+	// 	$item_office = "bravo";
+	// }
+	// echo $radio_value;
+
 	$sql = "SELECT item_no FROM batch_list ORDER BY item_no ASC";
 	$result = mysqli_query($db, $sql);
 	foreach($result as $row){
-									echo "<option value='" . $row['item_no'] . "'>" . $row['item_no'] . "</option>";
+									echo "<option value='" . $row['item_no'] . "'>" . number_format(getStock($db, $row['item_no'], $radio_value)) . " pcs left</option>";
 	}
 ?>
 									</datalist>

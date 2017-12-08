@@ -41,3 +41,13 @@ body {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
+
+.pagination a{
+    font-size: 15px;
+}
+
+.table_page{
+    margin: auto;
+    width: 100%;
+    text-align: center;
+}

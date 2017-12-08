@@ -39,7 +39,7 @@
 	}
 ?>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<link href="css_ext/sidebar.css" rel="stylesheet">
@@ -189,7 +189,7 @@ th, footer {
 
 	<div id="wrapper">
 		<div id="content">
-			<form action="purchase_order_update.php" method="post" class="form-inline">
+			<form action="purchase_order_update.php" method="post" class="form-inline" onsubmit="return confirm('Do you really want to submit the form?');">
 			<div class="row">
 				<div class="col-md-12" style="text-align: center; background-color: #0884e4; color: white; padding: 10px; margin: -15px 0 15px 0;"><h3><strong>Update Form</strong></h3>
 				</div>
@@ -229,6 +229,14 @@ th, footer {
 					<div class="form-group">
 						<label for="quantity">Quantity</label>
 						<input type="text" id="update_quantity" name="update_quantity" class="form-control" autocomplete="off" value="<?php echo $purchase_row['quantity']; ?>" required>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-left: 10px; margin-bottom: 5px;">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for="plant">Plant</label>
+						<input type="text" id="plant" name="plant" class="form-control" value="<?php echo ucfirst($purchase_row['office']); ?>" readonly>
 					</div>
 				</div>
 			</div>
@@ -309,30 +317,60 @@ th, footer {
 		// $reply = array('post' => $_POST);
 		// echo json_encode($reply);
 
-		$sql_update = "UPDATE purchase_order SET purchase_order_no = '$purchase_order_no', item_no = '$item_no', quantity = '$quantity' WHERE purchase_id = '$purchase_id'";
+		$sql_update = "UPDATE purchase_order SET purchase_order_no = '$update_purchase_order_no', item_no = '$update_item_no', quantity = '$update_quantity' WHERE purchase_id = '$purchase_id'";
 
 		if($update_purchase_order_no != $purchase_row['purchase_order_no'] && $update_item_no == $purchase_row['item_no'] && $update_quantity == $purchase_row['quantity']){
 			// update po no only
 			$history = "INSERT INTO history(table_report, transaction_type, detail, history_date, office) 
-		 					VALUES('Purchase Order','Update P.O. Detail','$plant update P.O. No. ".$purchase_row['purchase_order_no']." details','$datetime','".$purchase_row['office']."')";
-		}else if($update_purchase_order_no == $purchase_row['purchase_order_no'] && $update_item_no != $purchase_row['item_no'] && $update_quantity == $purchase_row['quantity'])
+		 					VALUES('Purchase Order','Update Purchase Order','Update P.O. No. ".$purchase_row['purchase_order_no']." to $update_purchase_order_no','$datetime','".$purchase_row['office']."')";
+
+		}else if($update_purchase_order_no == $purchase_row['purchase_order_no'] && $update_item_no != $purchase_row['item_no'] && $update_quantity == $purchase_row['quantity']){
 			// update item only
+			$history = "INSERT INTO history(table_report, transaction_type, detail, history_date, office) 
+		 					VALUES('Purchase Order','Update Purchase Order','Update ".$purchase_row['item_no']." to $update_item_no under P.O. No. ".$purchase_row['purchase_order_no']."','$datetime','".$purchase_row['office']."')";
+
 		}else if($update_purchase_order_no == $purchase_row['purchase_order_no'] && $update_item_no == $purchase_row['item_no'] && $update_quantity != $purchase_row['quantity']){
 			// update quantity only
+			$history = "INSERT INTO history(table_report, transaction_type, detail, history_date, office) 
+		 					VALUES('Purchase Order','Update Purchase Order','Update ".$purchase_row['item_no']." pcs from ".$purchase_row['quantity']." to $update_quantity pcs under P.O. No. ".$purchase_row['purchase_order_no']."','$datetime','".$purchase_row['office']."')";
+
 		}else if($update_purchase_order_no != $purchase_row['purchase_order_no'] && $update_item_no != $purchase_row['item_no'] && $update_quantity == $purchase_row['quantity']){
 			// update po no and item only
+			$history = "INSERT INTO history(table_report, transaction_type, detail, history_date, office) 
+		 					VALUES('Purchase Order','Update Purchase Order','Update P.O. No. ".$purchase_row['purchase_order_no']." to $update_purchase_order_no and item ".$purchase_row['item_no']." to $update_item_no','$datetime','".$purchase_row['office']."')";
+
 		}else if($update_purchase_order_no != $purchase_row['purchase_order_no'] && $update_item_no == $purchase_row['item_no'] && $update_quantity != $purchase_row['quantity']){
 			// update po no and quantity only
+			$history = "INSERT INTO history(table_report, transaction_type, detail, history_date, office) 
+		 					VALUES('Purchase Order','Update Purchase Order','Update P.O. No. ".$purchase_row['purchase_order_no']." to $update_purchase_order_no and its quantity to $update_quantity pcs','$datetime','".$purchase_row['office']."')";
+
 		}else if($update_purchase_order_no == $purchase_row['purchase_order_no'] && $update_item_no != $purchase_row['item_no'] && $update_quantity != $purchase_row['quantity']){
 			// update item and quantity only
+			$history = "INSERT INTO history(table_report, transaction_type, detail, history_date, office) 
+		 					VALUES('Purchase Order','Update Purchase Order','Update ".$purchase_row['item_no']." to $update_item_no and its quantity to $update_quantity pcs under P.O. No. ".$purchase_row['purchase_order_no']."','$datetime','".$purchase_row['office']."')";
+
 		}else if($update_purchase_order_no != $purchase_row['purchase_order_no'] && $update_item_no != $purchase_row['item_no'] && $update_quantity != $purchase_row['quantity']){
 			// update all fields
+			$history = "INSERT INTO history(table_report, transaction_type, detail, history_date, office) 
+		 					VALUES('Purchase Order','Update Purchase Order','Update P.O. No. ".$purchase_row['purchase_order_no']." to $update_purchase_order_no, ".$purchase_row['item_no']." to $update_item_no and its quantity to $update_quantity pcs','$datetime','".$purchase_row['office']."')";
 		}
 
 
+		
 
 		// echo "<script> alert('Purchase Order No. succesfully updated')</script>";
-		// if(mysqli_query($db, $sql_update) && mysqli_query($db, $history)){
+		if(mysqli_query($db, $sql_update)){
+			if(isset($history)){
+				mysqli_query($db, $history);
+				echo "<script>alert('Purchase Order No. has been updated'); window.location.href='purchase_order.php'</script>";
+				// echo $history;
+			}else{
+				echo "<script> alert('No changes has been made');window.location.href='purchase_order.php'</script>";
+			}
+		}else{
+			phpAlert('Something went wrong. Please try again.');
+			echo "<meta http-equiv='refresh' content='0'>";
+		}
 		// 	echo "<script> alert('Purchase Order No. succesfully updated'); 
 		// 					window.location.href='purchase_order.php'
 		// 		  </script>";

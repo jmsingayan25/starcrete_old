@@ -50,7 +50,7 @@
 	}
 ?>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<link href="css_ext/sidebar.css" rel="stylesheet">
@@ -247,7 +247,7 @@ th, footer {
 
 	<div id="wrapper">
 		<div id="content">
-			<form action="delivery_transaction_issue.php" method="post" class="form-inline">
+			<form action="delivery_transaction_issue.php" method="post" class="form-inline" onsubmit="return confirm('Do you really want to submit the form?');">
 				<input type="hidden" id="hidden_quantity" value="<?php echo $purchase_row['quantity'] ?>">
 			<div class="row">
 				<!-- <p id="demo"></p> -->
@@ -347,7 +347,7 @@ th, footer {
 							VALUES('$delivery_no','$item_no','$quantity','$client','$address','$contact','$contact_no','$gate_pass_no','$po_no','$datetime','$office','On Delivery','$purchase_id')";
 
 		$history_query = "INSERT INTO history(table_report, transaction_type, detail, history_date, office) 
-		 					VALUES('Delivery','Issued DR No.','$plant issued DR No. $delivery_no with P.O. No. $po_no and ".$_POST['quantity']." pcs of $item_no and ready to deliver to $client','$datetime','$office')";
+		 					VALUES('Delivery','Issued DR No.','Issued DR No. $delivery_no with P.O. No. $po_no and ".$_POST['quantity']." pcs of $item_no and ready to deliver to $client','$datetime','$office')";
 
 		$purchase_order_update = "UPDATE purchase_order SET balance = balance - '$quantity'
 									WHERE purchase_id = '$purchase_id'";

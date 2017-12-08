@@ -147,6 +147,11 @@
 
 </script>
 <style>
+html, body {
+   margin:0;
+   padding:0;
+   height:100%;
+}
 #wrapper {
 	min-height:83%;
 	position:relative;
@@ -154,7 +159,7 @@
 
 #content {
 	margin: 0 auto;
-	min-height: 550px;
+	/*min-height: 550px;*/
 	padding-bottom:20px; /* Height of the footer element */
 	padding-right: 15px;
 	padding-left: 15px;
@@ -171,13 +176,13 @@
     text-align: center; 
     padding: 10px;
 }
-.table tbody{
+/*.table tbody{
   overflow-y: scroll;
   height: 310px;
   position: absolute;
-  /*width: 98%;*/
+  width: 98%;
   border:1px solid #cecece;
-}
+}*/
 .table td {
    border-bottom: 1px solid #bababa;
    border-right: 1px solid #d1d1d1;

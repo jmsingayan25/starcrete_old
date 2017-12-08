@@ -12,6 +12,32 @@
 		header("location: login.php");
 	}
 
+	if(!isset($_GET['page']) || $_GET['page'] == ''){
+		$_GET['page'] = 0;
+	}
+
+	if(isset($_POST['radioOffice'])){
+		$_SESSION['radioOffice'] = $_POST['radioOffice'];
+	}
+
+	if(isset($_POST['start_date'])){
+		$_SESSION['start_date'] = $_POST['start_date'];
+	}
+
+	if(isset($_POST['end_date'])){
+		$_SESSION['end_date'] = $_POST['end_date'];
+	}
+
+	if(!isset($_SESSION['radioOffice']) || !isset($_SESSION['start_date']) || !isset($_SESSION['end_date'])){
+		$_SESSION['radioOffice'] = 'bravo';
+		$_SESSION['start_date'] = '';
+		$_SESSION['end_date'] = '';
+	}
+
+	$_POST['radioOffice'] = $_SESSION['radioOffice'];
+	$_POST['start_date'] = $_SESSION['start_date'];
+	$_POST['end_date'] = $_SESSION['end_date'];
+
 	$user_query = $db->prepare("SELECT * FROM users WHERE username = ?");
 	$user_query->bind_param('s', $_SESSION['login_user']);
 	$user_query->execute();
@@ -31,7 +57,7 @@
 	}
 ?>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<link rel="stylesheet" href="css_ext/sidebar.css">
@@ -47,20 +73,6 @@
 		    $('.modal-body').find("input,textarea,select").val('').end();
 		});
 	});
-
-	// var time = new Date().getTime();
-	// $(document.body).bind("mousemove keypress", function(e) {
-	// 	time = new Date().getTime();
-	// });
-
-	// function refresh() {
-	// 	if(new Date().getTime() - time >= 60000) 
-	// 		window.location.reload(true);
-	// 	else 
-	// 		setTimeout(refresh, 10000);
- //    }
-
- //    setTimeout(refresh, 10000);
 
  	var timer = null;
 
@@ -114,7 +126,7 @@
 	        $filteredRows.hide();
 	        /* Prepend no-result row if all rows are filtered */
 	        if ($filteredRows.length === $rows.length) {
-	            $table.find('tbody').prepend($('<tr class="no-result text-center"><td  style="width: 1500px; height: 300px;background: white; border: none; text-align:center; vertical-align:middle;"><h4><p class="text-muted">No data found</p></h4></td></tr>'));
+	            $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="11" style="min-height: 100%; background: white; text-align:center; vertical-align:middle;"><h4><p class="text-muted">No data found</p></h4></td></tr>'));
 	        }
 	    });
 	});
@@ -135,15 +147,20 @@
 
 </script>
 <style>
+html, body {
+   margin:0;
+   padding:0;
+   height:100%;
+}
 #wrapper {
-	min-height:83%;
+	min-height:82%;
 	position:relative;
 }
 
 #content {
 	margin: 0 auto;
-	min-height: 750px;
-	padding-bottom:20px; /* Height of the footer element */
+	/*min-height: 750px;*/
+	padding-bottom:50px; /* Height of the footer element */
 	padding-right: 15px;
 	padding-left: 15px;
 	padding-top: 15px;
@@ -159,13 +176,13 @@
     text-align: center; 
     padding: 10px;
 }
-.table tbody{
+/*.table tbody{
   overflow-y: scroll;
   height: 500px;
   position: absolute;
-  /*width: 98%;*/
+  width: 98%;
   border:1px solid #cecece;
-}
+}*/
 .table td {
    border-bottom: 1px solid #bababa;
    border-right: 1px solid #d1d1d1;
@@ -340,7 +357,6 @@ hr{
 			<form action="delivery.php" method="post" class="form-inline">
 			<div class="row" style="margin: 0px; margin-bottom: 5px;">
 				<div class="col-md-6">
-					<!-- <form action="delivery.php" method="post" class="form-inline"> -->
 <?php
 	if($office == 'head'){
 ?>
@@ -354,9 +370,6 @@ hr{
 <?php
 	}
 ?>	
-					<!-- <input type="date" name="date_view" class="form-control" value="<?php if(isset($_POST['date_view'])) { echo htmlentities ($_POST['date_view']); }?>">
-					<input type="submit" name="search_pending" id="search_pending" value="Search" class="btn btn-primary"> -->
-					<!-- </form> -->
 				</div>
 				
 			</div>
@@ -396,20 +409,6 @@ hr{
 							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">View Reports
 							<span class="caret"></span></button>
 							<ul class="dropdown-menu dropdown-menu-right">
-<!-- 								<li class="dropdown-header">Order</li>
-								<li>
-<?php
-	if($count > 0){
-?>
-									<a href='delivery_transaction.php' class="btn-danger">Issue DR No. <span class='badge'><?php echo $count; ?></span></a>
-<?php
-	}else{
-?>
-									<a href='delivery_transaction.php' class="btn-success" readonly>Issue DR No. <span class='badge'><?php echo $count; ?></span></a>
-<?php
-	}
-?>
-								</li> -->
 								<li class="dropdown-header">Reports</li>
 								<li>
 <?php
@@ -447,24 +446,26 @@ hr{
 			$search_plant = $office;
 		}
 		
-		// if($_POST['date_view'] == ''){
-		// 	$string_date = "";
-		// }else{
-		// 	$date = $_POST['date_view'];
-		// 	$string_date = "AND DATE_FORMAT(date_delivery,'%Y-%m-%d') = '$date'";
-		// }
 		if($_POST['end_date'] == ''){
-			$end_date = date("Y-m-d");
+			$end_date = "";
 		}else{
 			$end_date = $_POST['end_date'];
 		}
+
 		if($_POST['start_date'] == ''){
-			// $string_date = "";
-			$string_date = "AND DATE_FORMAT(date_delivery,'%Y-%m-%d') <= '$end_date'";
+			$start_date = "";
 		}else{
-			$date = $_POST['start_date'];
-			// $string_date = "AND DATE_FORMAT(date_delivery,'%Y-%m-%d') = '$date'";
-			$string_date = "AND DATE_FORMAT(date_delivery,'%Y-%m-%d') BETWEEN '$date' AND '$end_date'";
+			$start_date = $_POST['start_date'];
+		}
+
+		if($_POST['start_date'] == '' && $_POST['end_date'] == ''){
+			$string_date = "";
+		}else if($_POST['start_date'] == '' && $_POST['end_date'] != ''){
+			$string_date = "AND DATE_FORMAT(date_delivery,'%Y-%m-%d') <= '$end_date'";
+		}else if($_POST['start_date'] != '' && $_POST['end_date'] == ''){
+			$string_date = "AND DATE_FORMAT(date_delivery,'%Y-%m-%d') >= '$start_date'";		
+		}else{
+			$string_date = "AND DATE_FORMAT(date_delivery,'%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'";
 		}
 ?>
 					<table class="table table-striped">
@@ -510,16 +511,105 @@ hr{
 		$string = " WHERE office = '$office'";
 	}
 
-	$query = "SELECT *, FORMAT(quantity,0) as quantity, DATE_FORMAT(date_delivery,'%m/%d/%y') as date_delivery
+	$sql = "select * from delivery".$string." ".$string_date." AND remarks = 'On Delivery'";
+	// echo $sql;
+	$sql_result = mysqli_query($db, $sql); 
+	$total = mysqli_num_rows($sql_result);
+
+	$adjacents = 3;
+	$targetpage = "delivery.php"; //your file name
+	$limit = 10; //how many items to show per page
+	$page = $_GET['page'];
+
+	if($page){ 
+		$start = ($page - 1) * $limit; //first item to display on this page
+	}else{
+		$start = 0;
+	}
+
+	/* Setup page vars for display. */
+	if ($page == 0) $page = 1; //if no page var is given, default to 1.
+	$prev = $page - 1; //previous page is current page - 1
+	$next = $page + 1; //next page is current page + 1
+	$lastpage = ceil($total/$limit); //lastpage.
+	$lpm1 = $lastpage - 1; //last page minus 1
+
+	/* CREATE THE PAGINATION */
+	$counter = 0;
+	$pagination = "";
+	if($lastpage > 1){ 
+		$pagination .= "<div class='pagination1'> <ul class='pagination'>";
+		if ($page > $counter+1) {
+			$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$prev&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\"><<</a></li>"; 
+		}
+
+		if ($lastpage < 7 + ($adjacents * 2)) { 
+			for ($counter = 1; $counter <= $lastpage; $counter++){
+				if ($counter == $page)
+				$pagination.= "<li class='page-item active'><a class='page-link' href='#'>$counter</a></li>";
+				else
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$counter&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$counter</a></li>"; 
+			}
+		}
+		elseif($lastpage > 5 + ($adjacents * 2)){ //enough pages to hide some
+			//close to beginning; only hide later pages
+			if($page < 1 + ($adjacents * 2)) {
+				for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++){
+					if ($counter == $page)
+					$pagination.= "<li class='page-item active'><a class='page-link' href='#'>$counter</a></li>";
+					else
+					$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$counter&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$counter</a></li>"; 
+				}
+				$pagination.= "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$lpm1&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$lpm1</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$lastpage&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$lastpage</a></li>"; 
+			}
+			//in middle; hide some front and some back
+			elseif($lastpage - ($adjacents * 2) > $page && $page > ($adjacents * 2)){
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=1&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">1</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=2&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">2</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+				for ($counter = $page - $adjacents; $counter <= $page + $adjacents; $counter++){
+					if ($counter == $page)
+					$pagination.= "<li class='page-item active'><a class='page-link' href='#'>$counter</a></li>";
+					else
+					$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$counter&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$counter</a></li>"; 
+				}
+				$pagination.= "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$lpm1&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$lpm1</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$lastpage&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$lastpage</a></li>"; 
+			}
+			//close to end; only hide early pages
+			else{
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=1&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">1</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=2&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">2</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+				for ($counter = $lastpage - (2 + ($adjacents * 2)); $counter <= $lastpage; $counter++){
+					if ($counter == $page)
+					$pagination.= "<li class='page-item active'><a class='page-link' href='#'>$counter</a></li>";
+					else
+					$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$counter&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$counter</a></li>"; 
+				}
+			}
+		}
+
+		//next button
+		if ($page < $counter - 1) 
+			$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$next&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">>></a></li>";
+		else
+			$pagination.= "";
+		$pagination.= "</ul></div>\n"; 
+	}
+ 
+ 	$query = "SELECT *, FORMAT(quantity,0) as quantity, DATE_FORMAT(date_delivery,'%m/%d/%y') as date_delivery
 				FROM delivery ".$string." ".$string_date."
 				AND remarks = 'On Delivery' 
-				ORDER BY delivery_id DESC, office DESC";
- 
+				ORDER BY delivery_id DESC LIMIT $start, $limit";
+	echo $query;
 	$result = mysqli_query($db, $query);
 	if(mysqli_num_rows($result) > 0){
 		$hash = 1;
 		while($row = mysqli_fetch_assoc($result)){
-			// $date = date_create($row['date_delivery']);
 ?>
 							<tr>
 								<td class='col-md-1'><strong><?php echo $row['delivery_receipt_no']; ?></strong></td>
@@ -544,111 +634,6 @@ hr{
 										<input type="hidden" name="post_delivery_id" value="<?php echo $row['delivery_id']; ?>">
    										<input type="submit" value="Update Info" class="btn btn-warning btn-xs" style="margin-bottom: 4px;">
 									</form>
-									<!-- <button type='button' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#myModal<?php echo $hash; ?>' style='float: center;margin-bottom: 3px; width: 85px;'>Update Item</button>
-
-									<form action="delivery.php" method="post">
-										<div class="modal fade" id="myModal<?php echo $hash;?>" role="dialog">
-											<div class="modal-dialog modal-sm">
-
-												<div class="modal-content">
-													<div class="modal-header">
-														<h4 class="modal-title">Delivery Details</h4>
-													</div>
-													<div class="modal-body" style="text-align: left;">
-														<input type="hidden" id="hidden_id" name="hidden_id" value="<?php echo $row['delivery_id']; ?>">
-														<input type="hidden" id="hidden_fk_id" name="hidden_fk_id" value="<?php echo $row['fk_po_id']; ?>">
-														<input type="hidden" id="hidden_dr_no" name="hidden_dr_no" value="<?php echo $row['delivery_receipt_no']; ?>">
-														<input type="hidden" id="hidden_item_no" name="hidden_item_no" value="<?php echo $row['item_no']; ?>">
-														<input type="hidden" id="hidden_client" name="hidden_client" value="<?php echo $row['client_name']; ?>">
-														<input type="hidden" id="po_no" name="po_no" class="form-control" value="<?php echo $row['po_no_delivery'] ?>">
-														<input type="hidden" id="prev_item" name="prev_item" class="form-control" value="<?php echo $row['item_no'] ?>">
-														<input type="hidden" id="quantity_order" name="quantity_order" class="form-control" value="<?php echo $row['quantity'] ?>">
-														<div class="row">
-															<div class="col-md-6">
-																<label>P.O. No.</label>
-															</div>
-															<div class="col-md-6">
-																<strong><?php echo $row['po_no_delivery'] ?></strong>
-															</div>
-														</div>
-														<hr>
-														<div class="row">
-															<div class="col-md-6">
-																<label>DR No.</label>
-															</div>
-															<div class="col-md-6" style="padding-bottom: 15px;"> -->
-																<!-- <strong><?php echo $row['delivery_receipt_no'] ?></strong>
-																<input type="text" name="update_delivery_receipt_no" value="<?php echo $row['delivery_receipt_no'] ?>" class="form-control">
-															</div>
-														</div>
-														<hr>
-														<div class="row">
-															<div class="col-md-6">
-																<label>Gate Pass</label>
-															</div>
-															<div class="col-md-6" style="padding-bottom: 15px;">
-																<strong><?php echo $row['gate_pass'] ?></strong> -->
-																<!-- <input type="text" name="update_gate_pass" value="<?php echo $row['gate_pass'] ?>" class="form-control">
-															</div>
-														</div>
-														<hr>
-														<div class="row">
-															<div class="col-md-6">
-																<label>Quantity</label>
-															</div>
-															<div class="col-md-6" style="padding-bottom: 15px;"> -->
-																<!-- <strong><?php echo $row['quantity'] ?></strong> -->
-																<!-- <input type="text" name="update_quantity" value="<?php echo str_replace(',','',$row['quantity']); ?>" class="form-control">
-															</div>
-														</div>
-														<hr>
-														<div class="row">
-															<div class="col-md-6">
-																<label>Current Item</label>
-															</div>
-															<div class="col-md-6">
-																<strong><?php echo $row['item_no'] ?></strong>
-															</div>
-														</div>
-														<hr>
-														<div class="row">
-															<div class="col-md-6">
-																<label>New Item</label>
-															</div>
-															<div class="col-md-6"> -->
-									 							<!-- <input list="update_items" name="update_item" size="10" required>
-																<datalist id="update_items">
-<?php
-	$item_sql = "SELECT item_no FROM batch_list
-			WHERE item_no != '".$row['item_no']."' ORDER BY item_no ASC";
-	$result1 = mysqli_query($db, $item_sql);
-	foreach($result1 as $row1){
-									echo "<option value='" . $row1['item_no'] . "'>" . $row1['item_no'] . "</option>";
-	}
-?>
-																</datalist> -->
-																<!-- <select id="update_item" name="update_item" class="form-control" required>
-																	<option value="">Select</option>
-<?php
-	$item_sql = "SELECT item_no FROM batch_list
-			WHERE item_no != '".$row['item_no']."' ORDER BY item_no ASC";
-	$result1 = mysqli_query($db, $item_sql);
-	foreach($result1 as $row1){
-									echo "<option value='" . $row1['item_no'] . "'>" . $row1['item_no'] . "</option>";
-	}
-?>																	
-																</select>
-															</div>
-														</div>
-													</div>
-													<div class="modal-footer">
-														<input type="submit" id="update" name="update" value="Update Item" class="btn btn-primary">
-														<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</form> -->
 						 				<button type="submit" class='btn btn-xs btn-success' style="margin-bottom: 3px; width: 85px;" data-toggle='modal' data-target='#deliveryModal<?php echo $hash; ?>'>Delivered</button>
 						 				
 						 				<form action="delivery.php" method="post">
@@ -783,7 +768,7 @@ hr{
 	}else{
 ?>
 							<tr>
-								<td style='width: 1500px; height: 300px; background: white; border: none; text-align:center; 
+								<td colspan="11" style='min-height: 100%; background: white; text-align:center; 
 		    vertical-align:middle;'><h4><p class='text-muted'>No data found</p></h4>
 		    					</td>
 		    				</tr>
@@ -803,6 +788,28 @@ hr{
 			}
 		}else{
 			$search_plant = $office;
+		}
+
+		if($_POST['end_date'] == ''){
+			$end_date = '';
+		}else{
+			$end_date = $_POST['end_date'];
+		}
+
+		if($_POST['start_date'] == ''){
+			$start_date = '';
+		}else{
+			$start_date = $_POST['start_date'];
+		}
+
+		if($_POST['start_date'] == '' && $_POST['end_date'] == ''){
+			$string_date = "";
+		}else if($_POST['start_date'] == '' && $_POST['end_date'] != ''){
+			$string_date = "AND DATE_FORMAT(date_delivery,'%Y-%m-%d') <= '$end_date'";
+		}else if($_POST['start_date'] != '' && $_POST['end_date'] == ''){
+			$string_date = "AND DATE_FORMAT(date_delivery,'%Y-%m-%d') >= '$start_date'";		
+		}else{
+			$string_date = "AND DATE_FORMAT(date_delivery,'%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'";
 		}
 ?>
 					<table class="table table-striped">
@@ -848,11 +855,103 @@ hr{
 		$string = " WHERE office = '$office'";
 	}
 
+	$sql = "select * from delivery".$string." ".$string_date." AND remarks = 'On Delivery'";
+	// echo $sql;
+	$sql_result = mysqli_query($db, $sql); 
+	$total = mysqli_num_rows($sql_result);
+
+	$adjacents = 3;
+	$targetpage = "delivery.php"; //your file name
+	$limit = 10; //how many items to show per page
+	$page = $_GET['page'];
+
+	if($page){ 
+		$start = ($page - 1) * $limit; //first item to display on this page
+	}else{
+		$start = 0;
+	}
+
+	/* Setup page vars for display. */
+	if ($page == 0) $page = 1; //if no page var is given, default to 1.
+	$prev = $page - 1; //previous page is current page - 1
+	$next = $page + 1; //next page is current page + 1
+	$lastpage = ceil($total/$limit); //lastpage.
+	$lpm1 = $lastpage - 1; //last page minus 1
+
+	/* CREATE THE PAGINATION */
+	$counter = 0;
+	$pagination = "";
+	if($lastpage > 1){ 
+		$pagination .= "<div class='pagination1'> <ul class='pagination'>";
+		if ($page > $counter+1) {
+			$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$prev&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\"><<</a></li>"; 
+		}
+
+		if ($lastpage < 7 + ($adjacents * 2)) { 
+			for ($counter = 1; $counter <= $lastpage; $counter++){
+				if ($counter == $page)
+				$pagination.= "<li class='page-item active'><a class='page-link' href='#'>$counter</a></li>";
+				else
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$counter&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$counter</a></li>"; 
+			}
+		}
+		elseif($lastpage > 5 + ($adjacents * 2)){ //enough pages to hide some
+			//close to beginning; only hide later pages
+			if($page < 1 + ($adjacents * 2)) {
+				for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++){
+					if ($counter == $page)
+					$pagination.= "<li class='page-item active'><a class='page-link' href='#'>$counter</a></li>";
+					else
+					$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$counter&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$counter</a></li>"; 
+				}
+				$pagination.= "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$lpm1&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$lpm1</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$lastpage&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$lastpage</a></li>"; 
+			}
+			//in middle; hide some front and some back
+			elseif($lastpage - ($adjacents * 2) > $page && $page > ($adjacents * 2)){
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=1&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">1</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=2&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">2</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+				for ($counter = $page - $adjacents; $counter <= $page + $adjacents; $counter++){
+					if ($counter == $page)
+					$pagination.= "<li class='page-item active'><a class='page-link' href='#'>$counter</a></li>";
+					else
+					$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$counter&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$counter</a></li>"; 
+				}
+				$pagination.= "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$lpm1&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$lpm1</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$lastpage&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$lastpage</a></li>"; 
+			}
+			//close to end; only hide early pages
+			else{
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=1&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">1</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=2&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">2</a></li>";
+				$pagination.= "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+				for ($counter = $lastpage - (2 + ($adjacents * 2)); $counter <= $lastpage; $counter++){
+					if ($counter == $page)
+					$pagination.= "<li class='page-item active'><a class='page-link' href='#'>$counter</a></li>";
+					else
+					$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$counter&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">$counter</a></li>"; 
+				}
+			}
+		}
+
+		//next button
+		if ($page < $counter - 1) 
+			$pagination.= "<li class='page-item'><a class='page-link' href=\"$targetpage?page=$next&radioOffice=$search_plant&start_date=$start_date&end_date=$end_date\">>></a></li>";
+		else
+			$pagination.= "";
+		$pagination.= "</ul></div>\n"; 
+	}
+
+
 	$query = "SELECT *, FORMAT(quantity,0) as quantity, DATE_FORMAT(date_delivery,'%m/%d/%y') as date_delivery 
-				FROM delivery ".$string." 
+				FROM delivery ".$string." ".$string_date."
 				AND remarks = 'On Delivery' 
-				ORDER BY delivery_id DESC, office DESC";
-    
+				ORDER BY delivery_id DESC
+				LIMIT $start, $limit";
+    echo $query;
 	$result = mysqli_query($db, $query);
 	if(mysqli_num_rows($result) > 0){
 		$hash = 1;
@@ -882,111 +981,6 @@ hr{
 										<input type="hidden" name="post_delivery_id" value="<?php echo $row['delivery_id']; ?>">
    										<input type="submit" value="Update Info" class="btn btn-warning btn-xs" style="margin-bottom: 4px;">
 									</form>
-									<!-- <button type='button' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#myModal<?php echo $hash; ?>' style='float: center;margin-bottom: 3px; width: 85px;'>Update Item</button>
-
-									<form action="delivery.php" method="post">
-										<div class="modal fade" id="myModal<?php echo $hash;?>" role="dialog">
-											<div class="modal-dialog modal-sm">
-
-												<div class="modal-content">
-													<div class="modal-header">
-														<h4 class="modal-title">Delivery Details</h4>
-													</div>
-													<div class="modal-body" style="text-align: left;"> -->
-														<!-- <input type="hidden" id="hidden_id" name="hidden_id" value="<?php echo $row['delivery_id']; ?>"> -->
-														<!-- <input type="hidden" id="hidden_fk_id" name="hidden_fk_id" value="<?php echo $row['fk_po_id']; ?>">
-														<input type="hidden" id="hidden_dr_no" name="hidden_dr_no" value="<?php echo $row['delivery_receipt_no']; ?>">
-														<input type="hidden" id="hidden_item_no" name="hidden_item_no" value="<?php echo $row['item_no']; ?>">
-														<input type="hidden" id="hidden_client" name="hidden_client" value="<?php echo $row['client_name']; ?>">
-														<input type="hidden" id="po_no" name="po_no" class="form-control" value="<?php echo $row['po_no_delivery'] ?>">
-														<input type="hidden" id="prev_item" name="prev_item" class="form-control" value="<?php echo $row['item_no'] ?>">
-														<input type="hidden" id="quantity_order" name="quantity_order" class="form-control" value="<?php echo $row['quantity'] ?>">
-														<div class="row">
-															<div class="col-md-6">
-																<label>P.O. No.</label>
-															</div>
-															<div class="col-md-6">
-																<strong><?php echo $row['po_no_delivery'] ?></strong>
-															</div>
-														</div>
-														<hr>
-														<div class="row">
-															<div class="col-md-6">
-																<label>DR No.</label>
-															</div>
-															<div class="col-md-6" style="padding-bottom: 15px;"> -->
-																<!-- <strong><?php echo $row['delivery_receipt_no'] ?></strong> -->
-																<!-- <input type="text" name="update_delivery_receipt_no" value="<?php echo $row['delivery_receipt_no'] ?>" class="form-control">
-															</div>
-														</div>
-														<hr>
-														<div class="row">
-															<div class="col-md-6">
-																<label>Gate Pass</label>
-															</div>
-															<div class="col-md-6" style="padding-bottom: 15px;"> -->
-																<!-- <strong><?php echo $row['gate_pass'] ?></strong> -->
-																<!-- <input type="text" name="update_gate_pass" value="<?php echo $row['gate_pass'] ?>" class="form-control">
-															</div>
-														</div>
-														<hr>
-														<div class="row">
-															<div class="col-md-6">
-																<label>Quantity</label>
-															</div>
-															<div class="col-md-6" style="padding-bottom: 15px;"> -->
-																<!-- <strong><?php echo $row['quantity'] ?></strong> -->
-																<!-- <input type="text" name="update_quantity" value="<?php echo str_replace(',','',$row['quantity']); ?>" class="form-control">
-															</div>
-														</div>
-														<hr>
-														<div class="row">
-															<div class="col-md-6">
-																<label>Current Item</label>
-															</div>
-															<div class="col-md-6">
-																<strong><?php echo $row['item_no'] ?></strong>
-															</div>
-														</div>
-														<hr>
-														<div class="row">
-															<div class="col-md-6">
-																<label>New Item</label>
-															</div>
-															<div class="col-md-6"> -->
-																<!-- <input list="update_items" name="update_item" size="10" required>
-																<datalist id="update_items">
-<?php
-	$item_sql = "SELECT item_no FROM batch_list
-			WHERE item_no != '".$row['item_no']."' ORDER BY item_no ASC";
-	$result1 = mysqli_query($db, $item_sql);
-	foreach($result1 as $row1){
-									echo "<option value='" . $row1['item_no'] . "'>" . $row1['item_no'] . "</option>";
-	}
-?>
-																</datalist> -->
-																<!-- <select id="update_item" name="update_item" class="form-control" required>
-																	<option value="">Select</option>
-<?php
-	$item_sql = "SELECT item_no FROM batch_list
-			WHERE item_no != '".$row['item_no']."' ORDER BY item_no ASC";
-	$result1 = mysqli_query($db, $item_sql);
-	foreach($result1 as $row1){
-									echo "<option value='" . $row1['item_no'] . "'>" . $row1['item_no'] . "</option>";
-	}
-?>																	
-																</select>
-															</div>
-														</div>
-													</div>
-													<div class="modal-footer">
-														<input type="submit" id="update" name="update" value="Update Item" class="btn btn-primary">
-														<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</form> -->
 										<button type="submit" class='btn btn-xs btn-success' style="margin-bottom: 3px; width: 85px;" data-toggle='modal' data-target='#deliveryModal<?php echo $hash; ?>'>Delivered</button>
 						 				
 						 				<form action="delivery.php" method="post">
@@ -1121,18 +1115,26 @@ hr{
 	}else{
 ?>
 							<tr>
-								<td style='width: 1500px; height: 300px; background: white; border: none; text-align:center; 
-		    vertical-align:middle;'><h4><p class='text-muted'>No data found</p></h4>
+								<td colspan="11" style='min-height: 100%; background: white; text-align:center; vertical-align: middle;'><h4><p class='text-muted'>No data found</p></h4>
 		    					</td>
 		    				</tr>
 <?php
 	}
-?>
+?>				
 						</tbody>
 					</table>
 <?php
 	}
 ?>					
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="table_page">
+<?php				
+						echo $pagination; 
+?>		
 					</div>
 				</div>
 			</div>
@@ -1181,7 +1183,7 @@ hr{
 		// mysqli_query($db, $purchase_order_count_update);
 		
 		$history_query = "INSERT INTO history(table_report,transaction_type,item_no,detail,history_date,office)
-							VALUES('Delivery','Delivered','$row_item_no','".ucfirst($row_office)." delivered DR No. $row_delivery_receipt_no with P.O. No. $row_po_no_delivery and ".number_format($row_quantity)." pcs of $row_item_no to $row_client_name','$datetime','$row_office')";
+							VALUES('Delivery','Delivered Order','$row_item_no','".ucfirst($row_office)." delivered DR No. $row_delivery_receipt_no with P.O. No. $row_po_no_delivery and ".number_format($row_quantity)." pcs of $row_item_no to $row_client_name','$datetime','$row_office')";
 
 		$batch_prod_stock = "INSERT INTO batch_prod_stock(item_no, delivered, office, date_production)
 								VALUES('$row_item_no','$row_quantity','$row_office','$datetime')";
@@ -1263,7 +1265,7 @@ hr{
 		// 				WHERE item_no = '$row_item_no' AND office = '$row_office'";
 
 		$history_query = "INSERT INTO history(table_report, transaction_type, detail, history_date, office) 
-							VALUES('Delivery','Backloaded','".ucfirst($row_office)." has backload delivery of DR No. $row_delivery_receipt_no with ".number_format($row_quantity)." pcs of $row_item_no under P.O. No. $row_po_no_delivery','$datetime','$row_office')";
+							VALUES('Delivery','Backloaded Order','".ucfirst($row_office)." has backload delivery of DR No. $row_delivery_receipt_no with ".number_format($row_quantity)." pcs of $row_item_no under P.O. No. $row_po_no_delivery','$datetime','$row_office')";
 
 		// $sql = "SELECT * FROM purchase_order 
 		// 		WHERE purchase_order_no = '".$row['po_no_delivery']."' 
@@ -1291,57 +1293,58 @@ hr{
 		}else{
 			phpAlert("Something went wrong!!");
 		}
-	}else if(isset($_POST['update'])){
+	}
+	// else if(isset($_POST['update'])){
 
 
-		$delivery_id = $_POST['hidden_id'];
-		$new_delivery_receipt_no = $_POST['update_delivery_receipt_no'];
-		$new_quantity = $_POST['update_quantity'];
-		$new_gate_pass = $_POST['update_gate_pass'];
-		$delivery_receipt_no = $_POST['hidden_dr_no'];
-		$fk_po_id = $_POST['hidden_fk_id'];
-		$prev_item_no = $_POST['hidden_item_no'];
-		$client = $_POST['hidden_client'];
-		$update_item_no = mysqli_real_escape_string($db, $_POST['update_item']);
-		$datetime = date("Y/m/d H:i:s");
-		//$office = ucfirst($office);
+	// 	$delivery_id = $_POST['hidden_id'];
+	// 	$new_delivery_receipt_no = $_POST['update_delivery_receipt_no'];
+	// 	$new_quantity = $_POST['update_quantity'];
+	// 	$new_gate_pass = $_POST['update_gate_pass'];
+	// 	$delivery_receipt_no = $_POST['hidden_dr_no'];
+	// 	$fk_po_id = $_POST['hidden_fk_id'];
+	// 	$prev_item_no = $_POST['hidden_item_no'];
+	// 	$client = $_POST['hidden_client'];
+	// 	$update_item_no = mysqli_real_escape_string($db, $_POST['update_item']);
+	// 	$datetime = date("Y/m/d H:i:s");
+	// 	//$office = ucfirst($office);
 
-		$sql = "UPDATE delivery SET item_no = '$update_item_no', delivery_receipt_no = '$new_delivery_receipt_no', quantity = '$new_quantity', gate_pass = '$new_gate_pass' WHERE delivery_id = '$delivery_id' AND delivery_receipt_no = '$delivery_receipt_no' AND fk_po_id = '$fk_po_id' AND office = '$office'";
+	// 	$sql = "UPDATE delivery SET item_no = '$update_item_no', delivery_receipt_no = '$new_delivery_receipt_no', quantity = '$new_quantity', gate_pass = '$new_gate_pass' WHERE delivery_id = '$delivery_id' AND delivery_receipt_no = '$delivery_receipt_no' AND fk_po_id = '$fk_po_id' AND office = '$office'";
 
-		// $sql = "UPDATE delivery SET item_no = '$update_item_no' WHERE delivery_id = '$delivery_id' AND delivery_receipt_no = '$delivery_receipt_no' AND fk_po_id = '$fk_po_id' AND office = '$office'";
+	// 	// $sql = "UPDATE delivery SET item_no = '$update_item_no' WHERE delivery_id = '$delivery_id' AND delivery_receipt_no = '$delivery_receipt_no' AND fk_po_id = '$fk_po_id' AND office = '$office'";
 
-		$history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no information','$datetime','$office')";
+	// 	$history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Update Delivery Order' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no information','$datetime','$office')";
 
-		// update item only
-		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no item $prev_item_no to $update_item_no to be delivered to $client','$datetime','$office')";
+	// 	// update item only
+	// 	// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no item $prev_item_no to $update_item_no to be delivered to $client','$datetime','$office')";
 
-		// // update DR No. only
-		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No.' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id','$datetime','$office')";
+	// 	// // update DR No. only
+	// 	// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No.' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id','$datetime','$office')";
 
-		// // update quantity only
-		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item Quantity' ,'$update_item_no','".ucfirst($office)." changed item quantity of $prev_item_no to $quantity under DR No. $delivery_receipt_no','$datetime','$office')";
+	// 	// // update quantity only
+	// 	// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item Quantity' ,'$update_item_no','".ucfirst($office)." changed item quantity of $prev_item_no to $quantity under DR No. $delivery_receipt_no','$datetime','$office')";
 
-		// update gatepass only
-		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No. and Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and item $prev_item_no to $update_item_no','$datetime','$office')";
+	// 	// update gatepass only
+	// 	// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No. and Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and item $prev_item_no to $update_item_no','$datetime','$office')";
 		
-		// // update quantity and DR no only
-		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item Quantity and DR No.' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and quantity of item $prev_item_no to $quantity','$datetime','$office')";
+	// 	// // update quantity and DR no only
+	// 	// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item Quantity and DR No.' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and quantity of item $prev_item_no to $quantity','$datetime','$office')";
 
-		// // update quantity and item only
-		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item and Item Quantity' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and item $prev_item_no to $update_item_no','$datetime','$office')";
+	// 	// // update quantity and item only
+	// 	// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed Item and Item Quantity' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and item $prev_item_no to $update_item_no','$datetime','$office')";
 
-		// // update DR No and item only
-		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No. and Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and item $prev_item_no to $update_item_no','$datetime','$office')";
+	// 	// // update DR No and item only
+	// 	// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No. and Item' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id and item $prev_item_no to $update_item_no','$datetime','$office')";
 
-		// // update DR No., quantity and item only
-		// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No., Item and Item Quantity' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id, item $prev_item_no to $update_item_no and quantity to $quantity','$datetime','$office')";
-
-
+	// 	// // update DR No., quantity and item only
+	// 	// $history = "INSERT INTO history(table_report, transaction_type, item_no, detail, history_date, office) VALUES('Delivery','Changed DR No., Item and Item Quantity' ,'$update_item_no','".ucfirst($office)." changed DR No. $delivery_receipt_no to $delivery_id, item $prev_item_no to $update_item_no and quantity to $quantity','$datetime','$office')";
 
 
 
-		echo $sql;
-		echo $history;
+
+
+	// 	echo $sql;
+	// 	echo $history;
 
 		// if(mysqli_query($db, $sql) && mysqli_query($db, $history)){
 		// 	phpAlert("Item has been updated!!!");
@@ -1349,5 +1352,5 @@ hr{
 		// }else{
 		// 	phpAlert("Something went wrong!!!");
 		// }
-	}
+	// }
 ?>
